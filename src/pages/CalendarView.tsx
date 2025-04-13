@@ -62,10 +62,10 @@ const CalendarView = () => {
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-bold">Calendrier</h1>
         <div className="flex space-x-2">
-          <button className="px-4 py-2 bg-primary text-white rounded-md hover:bg-primary/90">
+          <button className="px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90">
             Ajouter un événement
           </button>
-          <button className="px-4 py-2 bg-secondary text-white rounded-md hover:bg-secondary/90">
+          <button className="px-4 py-2 bg-secondary text-secondary-foreground rounded-md hover:bg-secondary/90">
             Exporter
           </button>
         </div>

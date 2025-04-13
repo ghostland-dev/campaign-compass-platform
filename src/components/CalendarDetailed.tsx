@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { format, startOfMonth, endOfMonth, eachDayOfInterval, getDay, addMonths, subMonths } from 'date-fns';
 import { fr } from 'date-fns/locale';
@@ -23,12 +22,12 @@ const CalendarDetailed: React.FC<CalendarDetailedProps> = ({ events, campaigns }
   
   const getStatusColor = (status: string) => {
     const statusColors = {
-      'active': 'bg-green-100 text-green-800 border-green-200',
-      'draft': 'bg-blue-100 text-blue-800 border-blue-200',
-      'completed': 'bg-gray-100 text-gray-800 border-gray-200',
-      'paused': 'bg-yellow-100 text-yellow-800 border-yellow-200'
+      'active': 'bg-green-100 text-green-800 border-green-200 dark:bg-green-900/30 dark:text-green-300 dark:border-green-800',
+      'draft': 'bg-blue-100 text-blue-800 border-blue-200 dark:bg-blue-900/30 dark:text-blue-300 dark:border-blue-800',
+      'completed': 'bg-gray-100 text-gray-800 border-gray-200 dark:bg-gray-800/50 dark:text-gray-300 dark:border-gray-700',
+      'paused': 'bg-yellow-100 text-yellow-800 border-yellow-200 dark:bg-yellow-900/30 dark:text-yellow-300 dark:border-yellow-800'
     };
-    return statusColors[status as keyof typeof statusColors] || 'bg-gray-100 text-gray-800 border-gray-200';
+    return statusColors[status as keyof typeof statusColors] || 'bg-gray-100 text-gray-800 border-gray-200 dark:bg-gray-800/50 dark:text-gray-300 dark:border-gray-700';
   };
   
   const getChannelIcon = (channel: string) => {
@@ -59,7 +58,7 @@ const CalendarDetailed: React.FC<CalendarDetailedProps> = ({ events, campaigns }
   };
   
   return (
-    <div className="bg-white rounded-lg shadow-sm p-4">
+    <div className="bg-card rounded-lg shadow-sm p-4">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-semibold">Calendrier des campagnes</h2>
         <div className="flex items-center space-x-2">
@@ -77,7 +76,7 @@ const CalendarDetailed: React.FC<CalendarDetailedProps> = ({ events, campaigns }
       
       <div className="grid grid-cols-7 gap-1 mb-2">
         {['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'].map((day) => (
-          <div key={day} className="text-center text-sm font-medium text-gray-600 py-2">
+          <div key={day} className="text-center text-sm font-medium text-gray-600 dark:text-gray-400 py-2">
             {day}
           </div>
         ))}
@@ -96,11 +95,13 @@ const CalendarDetailed: React.FC<CalendarDetailedProps> = ({ events, campaigns }
             <div
               key={day.toString()}
               className={`h-24 p-1 border rounded-md ${
-                isToday ? 'bg-blue-50 border-blue-200' : 'hover:bg-gray-50'
+                isToday 
+                  ? 'bg-blue-50 border-blue-200 dark:bg-blue-900/20 dark:border-blue-800/50' 
+                  : 'hover:bg-gray-50 dark:hover:bg-gray-800/30'
               }`}
             >
               <div className="text-right mb-1">
-                <span className={`text-xs font-medium ${isToday ? 'text-blue-700' : 'text-gray-700'}`}>
+                <span className={`text-xs font-medium ${isToday ? 'text-blue-700 dark:text-blue-400' : 'text-gray-700 dark:text-gray-400'}`}>
                   {format(day, 'd')}
                 </span>
               </div>
