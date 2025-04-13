@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import Layout from '@/components/Layout';
-import Calendar from '@/components/Calendar';
+import CalendarWrapper from '@/components/CalendarWrapper';
 import CampaignModal from '@/components/CampaignModal';
 import { Campaign, CalendarEvent } from '@/types';
 import { 
@@ -117,7 +117,7 @@ const Dashboard = () => {
         
         <div>
           <h2 className="text-xl font-semibold mb-4">Calendrier</h2>
-          <Calendar events={calendarEvents} />
+          <CalendarWrapper events={calendarEvents} />
         </div>
       </div>
       

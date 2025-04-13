@@ -1,115 +1,64 @@
+import * as React from "react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import { DayPicker } from "react-day-picker";
 
-import React, { useState } from 'react';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { format, startOfMonth, endOfMonth, eachDayOfInterval, isSameMonth, isSameDay, addMonths, subMonths, getDay } from 'date-fns';
-import { fr } from 'date-fns/locale';
-import { CalendarEvent } from '@/types';
-import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
+import { cn } from "@/lib/utils";
+import { buttonVariants } from "@/components/ui/button";
 
-interface CalendarProps {
-  events: CalendarEvent[];
-}
+export type CalendarProps = React.ComponentProps<typeof DayPicker>;
 
-const Calendar: React.FC<CalendarProps> = ({ events }) => {
-  const [currentMonth, setCurrentMonth] = useState(new Date());
-  
-  const prevMonth = () => {
-    setCurrentMonth(subMonths(currentMonth, 1));
-  };
-  
-  const nextMonth = () => {
-    setCurrentMonth(addMonths(currentMonth, 1));
-  };
-  
-  const daysInMonth = eachDayOfInterval({
-    start: startOfMonth(currentMonth),
-    end: endOfMonth(currentMonth),
-  });
-  
-  // Get day names in French
-  const weekDays = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'];
-  
-  // Get the day of the week for the first day of the month (0 = Sunday, 1 = Monday, etc.)
-  const firstDayOfMonth = getDay(startOfMonth(currentMonth));
-  
-  // Adjust for Monday as the first day of the week
-  const startingDayIndex = firstDayOfMonth === 0 ? 6 : firstDayOfMonth - 1;
-  
-  // Get events for a specific day
-  const getEventsForDay = (day: Date) => {
-    return events.filter(event => isSameDay(new Date(event.date), day));
-  };
-  
-  // Function to get status color
-  const getStatusColor = (status: string) => {
-    const colors: Record<string, string> = {
-      draft: 'bg-gray-100 text-gray-600 border-gray-200',
-      active: 'bg-green-100 text-green-600 border-green-200',
-      completed: 'bg-blue-100 text-blue-600 border-blue-200',
-      paused: 'bg-amber-100 text-amber-600 border-amber-200',
-    };
-    return colors[status] || 'bg-gray-100 text-gray-600 border-gray-200';
-  };
-  
+function Calendar({
+  className,
+  classNames,
+  showOutsideDays = true,
+  ...props
+}: CalendarProps) {
   return (
-    <div className="bg-white rounded-lg shadow p-4">
-      <div className="flex items-center justify-between mb-4">
-        <h2 className="text-xl font-semibold">
-          {format(currentMonth, 'MMMM yyyy', { locale: fr })}
-        </h2>
-        <div className="flex gap-1">
-          <Button variant="outline" size="icon" onClick={prevMonth}>
-            <ChevronLeft className="h-4 w-4" />
-          </Button>
-          <Button variant="outline" size="icon" onClick={nextMonth}>
-            <ChevronRight className="h-4 w-4" />
-          </Button>
-        </div>
-      </div>
-      
-      <div className="grid grid-cols-7 gap-1">
-        {weekDays.map((day) => (
-          <div key={day} className="text-center font-medium text-sm p-2">
-            {day}
-          </div>
-        ))}
-        
-        {/* Empty cells for days before the first day of the month */}
-        {Array.from({ length: startingDayIndex }).map((_, index) => (
-          <div key={`empty-${index}`} className="calendar-cell opacity-50"></div>
-        ))}
-        
-        {/* Days of the month */}
-        {daysInMonth.map((day) => (
-          <div 
-            key={day.toString()} 
-            className={cn(
-              "calendar-cell",
-              !isSameMonth(day, currentMonth) && "opacity-50"
-            )}
-          >
-            <div className="text-sm font-medium mb-2">
-              {format(day, 'd')}
-            </div>
-            <div className="calendar-cell-content">
-              {getEventsForDay(day).map((event) => (
-                <div 
-                  key={event.id} 
-                  className={cn(
-                    "text-xs p-1 mb-1 rounded border truncate",
-                    getStatusColor(event.status)
-                  )}
-                >
-                  {event.title}
-                </div>
-              ))}
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
+    <DayPicker
+      showOutsideDays={showOutsideDays}
+      className={cn("p-3", className)}
+      classNames={{
+        months: "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0",
+        month: "space-y-4",
+        caption: "flex justify-center pt-1 relative items-center",
+        caption_label: "text-sm font-medium",
+        nav: "space-x-1 flex items-center",
+        nav_button: cn(
+          buttonVariants({ variant: "outline" }),
+          "h-7 w-7 bg-transparent p-0 opacity-50 hover:opacity-100"
+        ),
+        nav_button_previous: "absolute left-1",
+        nav_button_next: "absolute right-1",
+        table: "w-full border-collapse space-y-1",
+        head_row: "flex",
+        head_cell:
+          "text-muted-foreground rounded-md w-9 font-normal text-[0.8rem]",
+        row: "flex w-full mt-2",
+        cell: "h-9 w-9 text-center text-sm p-0 relative [&:has([aria-selected].day-range-end)]:rounded-r-md [&:has([aria-selected].day-outside)]:bg-accent/50 [&:has([aria-selected])]:bg-accent first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md focus-within:relative focus-within:z-20",
+        day: cn(
+          buttonVariants({ variant: "ghost" }),
+          "h-9 w-9 p-0 font-normal aria-selected:opacity-100"
+        ),
+        day_range_end: "day-range-end",
+        day_selected:
+          "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground",
+        day_today: "bg-accent text-accent-foreground",
+        day_outside:
+          "day-outside text-muted-foreground opacity-50 aria-selected:bg-accent/50 aria-selected:text-muted-foreground aria-selected:opacity-30",
+        day_disabled: "text-muted-foreground opacity-50",
+        day_range_middle:
+          "aria-selected:bg-accent aria-selected:text-accent-foreground",
+        day_hidden: "invisible",
+        ...classNames,
+      }}
+      components={{
+        IconLeft: ({ ..._props }) => <ChevronLeft className="h-4 w-4" />,
+        IconRight: ({ ..._props }) => <ChevronRight className="h-4 w-4" />,
+      }}
+      {...props}
+    />
   );
-};
+}
+Calendar.displayName = "Calendar";
 
-export default Calendar;
+export { Calendar };
