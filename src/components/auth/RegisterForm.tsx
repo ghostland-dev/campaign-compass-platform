@@ -15,10 +15,13 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { motion } from 'framer-motion';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { AtSign, KeyRound, Loader2, User } from 'lucide-react';
 
 export default function RegisterForm() {
   const { register } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const form = useForm<RegisterInput>({
     resolver: zodResolver(registerSchema),
@@ -31,10 +34,12 @@ export default function RegisterForm() {
 
   async function onSubmit(data: RegisterInput) {
     try {
+      setError(null);
       setIsLoading(true);
       await register(data);
     } catch (error) {
       console.error('Registration error:', error);
+      setError(error instanceof Error ? error.message : "Une erreur est survenue lors de l'inscription");
     } finally {
       setIsLoading(false);
     }
@@ -42,17 +47,16 @@ export default function RegisterForm() {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-      className="w-full max-w-md space-y-6 p-6 bg-card rounded-lg border shadow-sm"
+      transition={{ duration: 0.3 }}
+      className="w-full space-y-5"
     >
-      <div className="space-y-2 text-center">
-        <h1 className="text-2xl font-bold">Créer un compte</h1>
-        <p className="text-muted-foreground">
-          Inscrivez-vous pour commencer à gérer vos campagnes
-        </p>
-      </div>
+      {error && (
+        <Alert variant="destructive" className="mb-4">
+          <AlertDescription>{error}</AlertDescription>
+        </Alert>
+      )}
       
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -63,7 +67,14 @@ export default function RegisterForm() {
               <FormItem>
                 <FormLabel>Nom</FormLabel>
                 <FormControl>
-                  <Input placeholder="John Doe" {...field} />
+                  <div className="relative">
+                    <User className="absolute left-3 top-2.5 h-5 w-5 text-muted-foreground" />
+                    <Input 
+                      placeholder="John Doe" 
+                      className="pl-10" 
+                      {...field} 
+                    />
+                  </div>
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -77,7 +88,15 @@ export default function RegisterForm() {
               <FormItem>
                 <FormLabel>Email</FormLabel>
                 <FormControl>
-                  <Input placeholder="email@exemple.com" type="email" {...field} />
+                  <div className="relative">
+                    <AtSign className="absolute left-3 top-2.5 h-5 w-5 text-muted-foreground" />
+                    <Input 
+                      placeholder="email@exemple.com" 
+                      type="email" 
+                      className="pl-10" 
+                      {...field} 
+                    />
+                  </div>
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -91,7 +110,15 @@ export default function RegisterForm() {
               <FormItem>
                 <FormLabel>Mot de passe</FormLabel>
                 <FormControl>
-                  <Input placeholder="••••••••" type="password" {...field} />
+                  <div className="relative">
+                    <KeyRound className="absolute left-3 top-2.5 h-5 w-5 text-muted-foreground" />
+                    <Input 
+                      placeholder="••••••••" 
+                      type="password" 
+                      className="pl-10" 
+                      {...field} 
+                    />
+                  </div>
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -99,7 +126,14 @@ export default function RegisterForm() {
           />
           
           <Button type="submit" className="w-full" disabled={isLoading}>
-            {isLoading ? 'Inscription en cours...' : 'S\'inscrire'}
+            {isLoading ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" /> 
+                Inscription en cours...
+              </>
+            ) : (
+              "S'inscrire"
+            )}
           </Button>
         </form>
       </Form>
