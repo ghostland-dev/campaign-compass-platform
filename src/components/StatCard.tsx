@@ -13,7 +13,7 @@ const StatCard: React.FC<StatCardProps> = ({ stat }) => {
   const isNegative = stat.change ? stat.change < 0 : false;
 
   return (
-    <div className="stats-card">
+    <div className="stats-card rounded-lg border bg-card text-card-foreground shadow p-4">
       <div className="flex items-start justify-between">
         <div>
           <p className="text-sm font-medium text-muted-foreground">{stat.title}</p>

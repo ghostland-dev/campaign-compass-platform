@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Check, Plus, Presentation, Target, Trash2, TrendingUp, Users } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
@@ -9,17 +9,39 @@ import StatCard from '@/components/StatCard';
 import CampaignCard from '@/components/CampaignCard';
 import Calendar from '@/components/Calendar';
 import CampaignModal from '@/components/CampaignModal';
-import { mockCampaigns, mockCalendarEvents, mockStats } from '@/data/mockData';
-import { Stat, Campaign } from '@/types';
+import { mockCalendarEvents, mockStats } from '@/data/mockData';
+import { Stat, Campaign, CalendarEvent } from '@/types';
+import { getCampaigns, saveCampaigns, addCampaign, getCalendarEvents, addCalendarEvent } from '@/services/storageService';
 
 const Index = () => {
   const { toast } = useToast();
   const [showCampaignModal, setShowCampaignModal] = useState(false);
-  const [campaigns, setCampaigns] = useState<Campaign[]>(mockCampaigns);
+  const [campaigns, setCampaigns] = useState<Campaign[]>([]);
+  const [calendarEvents, setCalendarEvents] = useState<CalendarEvent[]>([]);
+  
+  // Charger les données depuis localStorage au chargement de la page
+  useEffect(() => {
+    const storedCampaigns = getCampaigns();
+    if (storedCampaigns.length > 0) {
+      setCampaigns(storedCampaigns);
+    } else {
+      // Utiliser les données mock pour la première initialisation
+      saveCampaigns([]); // Initialiser avec un tableau vide
+      setCampaigns([]);
+    }
+    
+    const storedEvents = getCalendarEvents();
+    if (storedEvents.length > 0) {
+      setCalendarEvents(storedEvents);
+    } else {
+      // Utiliser les données mock pour la première initialisation
+      setCalendarEvents(mockCalendarEvents);
+    }
+  }, []);
   
   const handleCreateCampaign = (formData: any) => {
     const newCampaign: Campaign = {
-      id: `camp${campaigns.length + 1}`,
+      id: `camp${Date.now()}`,  // Utiliser un timestamp pour l'ID
       title: formData.title,
       description: formData.description || '',
       status: formData.status,
@@ -30,7 +52,22 @@ const Index = () => {
       team: ['team1'],
     };
     
-    setCampaigns([newCampaign, ...campaigns]);
+    // Ajouter la campagne et mettre à jour l'état
+    const updatedCampaigns = addCampaign(newCampaign);
+    setCampaigns(updatedCampaigns);
+    
+    // Ajouter automatiquement un événement au calendrier pour cette campagne
+    const newEvent: CalendarEvent = {
+      id: `event${Date.now()}`,
+      campaignId: newCampaign.id,
+      title: newCampaign.title,
+      date: newCampaign.startDate,
+      channel: newCampaign.channels[0] || 'other',
+      status: newCampaign.status
+    };
+    
+    const updatedEvents = addCalendarEvent(newEvent);
+    setCalendarEvents(updatedEvents);
     
     toast({
       title: "Campagne créée",
