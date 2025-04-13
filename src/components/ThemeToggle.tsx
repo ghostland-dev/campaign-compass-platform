@@ -1,8 +1,14 @@
 
 import React, { useEffect, useState } from 'react';
-import { Moon, Sun } from 'lucide-react';
+import { Moon, Sun, Monitor } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 
 export function ThemeToggle() {
   const [theme, setTheme] = useState<'light' | 'dark' | 'system'>('system');
@@ -45,28 +51,58 @@ export function ThemeToggle() {
     }
   };
 
-  const toggleTheme = () => {
-    const newTheme = theme === 'dark' ? 'light' : 'dark';
+  const setThemePreference = (newTheme: 'light' | 'dark' | 'system') => {
     setTheme(newTheme);
     localStorage.setItem('theme', newTheme);
     applyTheme(newTheme);
   };
 
+  // Get the icon for the current theme
+  const getThemeIcon = () => {
+    if (theme === 'dark') return <Sun className="h-5 w-5" />;
+    if (theme === 'light') return <Moon className="h-5 w-5" />;
+    return <Monitor className="h-5 w-5" />;
+  };
+
+  // Get the tooltip text based on theme
+  const getTooltipText = () => {
+    if (theme === 'dark') return 'Changer de thème (Sombre)';
+    if (theme === 'light') return 'Changer de thème (Clair)';
+    return 'Changer de thème (Système)';
+  };
+
   return (
     <TooltipProvider>
       <Tooltip>
-        <TooltipTrigger asChild>
-          <Button 
-            variant="ghost" 
-            size="icon" 
-            onClick={toggleTheme} 
-            className="text-foreground hover:text-foreground/80"
-          >
-            {theme === 'dark' ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
-          </Button>
-        </TooltipTrigger>
+        <DropdownMenu>
+          <TooltipTrigger asChild>
+            <DropdownMenuTrigger asChild>
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                className="text-foreground hover:text-foreground/80"
+              >
+                {getThemeIcon()}
+              </Button>
+            </DropdownMenuTrigger>
+          </TooltipTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem onClick={() => setThemePreference('light')}>
+              <Sun className="h-4 w-4 mr-2" />
+              <span>Clair</span>
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setThemePreference('dark')}>
+              <Moon className="h-4 w-4 mr-2" />
+              <span>Sombre</span>
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setThemePreference('system')}>
+              <Monitor className="h-4 w-4 mr-2" />
+              <span>Système</span>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
         <TooltipContent>
-          <p>{theme === 'dark' ? 'Passer au mode clair' : 'Passer au mode sombre'}</p>
+          <p>{getTooltipText()}</p>
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>

@@ -8,7 +8,7 @@ interface CampaignStatusProps {
 }
 
 const CampaignStatus: React.FC<CampaignStatusProps> = ({ status }) => {
-  // Status color mapping
+  // Status color mapping with better dark mode support
   const getStatusColor = (status: StatusType) => {
     switch (status) {
       case 'active':

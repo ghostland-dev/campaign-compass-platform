@@ -1,32 +1,42 @@
 
 import React, { useEffect, useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Check } from 'lucide-react';
+import { 
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle, 
+} from '@/components/ui/card';
+import { Separator } from '@/components/ui/separator';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { useToast } from '@/hooks/use-toast';
+import { Switch } from '@/components/ui/switch';
 
 const Preferences = () => {
-  const { toast } = useToast();
   const [theme, setTheme] = useState<'light' | 'dark' | 'system'>('system');
+  const [notifications, setNotifications] = useState(true);
+  const [emailDigest, setEmailDigest] = useState(true);
   
   useEffect(() => {
-    // Get the current theme from localStorage
+    // Load theme preference from localStorage
     const storedTheme = localStorage.getItem('theme') as 'light' | 'dark' | 'system' | null;
     if (storedTheme) {
       setTheme(storedTheme);
-    } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-      setTheme('dark');
-    } else {
-      setTheme('light');
     }
   }, []);
-
+  
   const handleThemeChange = (value: 'light' | 'dark' | 'system') => {
     setTheme(value);
     localStorage.setItem('theme', value);
     
+    // Apply the theme change
     const root = document.documentElement;
     
     if (value === 'dark' || 
@@ -37,94 +47,91 @@ const Preferences = () => {
       root.classList.remove('dark');
     }
   };
-  
-  const handleSavePreferences = () => {
-    toast({
-      title: "Préférences enregistrées",
-      description: "Vos préférences d'affichage ont été mises à jour.",
-    });
-  };
-  
+
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold">Préférences</h1>
+      <div>
+        <h3 className="text-xl font-medium">Préférences</h3>
+        <p className="text-sm text-muted-foreground mt-1">
+          Gérez vos préférences d'affichage et de notifications.
+        </p>
+      </div>
+      
+      <Separator />
       
       <Card>
         <CardHeader>
-          <CardTitle>Préférences d'affichage</CardTitle>
+          <CardTitle>Apparence</CardTitle>
+          <CardDescription>
+            Personnalisez l'apparence de l'application selon vos préférences.
+          </CardDescription>
         </CardHeader>
-        <CardContent>
-          <div className="space-y-6">
-            <div className="space-y-2">
-              <Label>Thème</Label>
-              <RadioGroup 
-                value={theme} 
-                onValueChange={(value) => handleThemeChange(value as 'light' | 'dark' | 'system')} 
-                className="flex gap-6"
-              >
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="light" id="light" />
-                  <Label htmlFor="light">Clair</Label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="dark" id="dark" />
-                  <Label htmlFor="dark">Sombre</Label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="system" id="system" />
-                  <Label htmlFor="system">Système</Label>
-                </div>
-              </RadioGroup>
-            </div>
-            
-            <div className="space-y-2">
-              <Label htmlFor="language">Langue</Label>
-              <Select defaultValue="fr">
-                <SelectTrigger id="language">
-                  <SelectValue placeholder="Sélectionner une langue" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="fr">Français</SelectItem>
-                  <SelectItem value="en">English</SelectItem>
-                  <SelectItem value="es">Español</SelectItem>
-                  <SelectItem value="de">Deutsch</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            
-            <div className="space-y-2">
-              <Label htmlFor="timezone">Fuseau horaire</Label>
-              <Select defaultValue="europe-paris">
-                <SelectTrigger id="timezone">
-                  <SelectValue placeholder="Sélectionner un fuseau horaire" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="europe-paris">Europe/Paris (GMT+1)</SelectItem>
-                  <SelectItem value="europe-london">Europe/London (GMT+0)</SelectItem>
-                  <SelectItem value="america-new_york">America/New_York (GMT-5)</SelectItem>
-                  <SelectItem value="asia-tokyo">Asia/Tokyo (GMT+9)</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            
-            <div className="space-y-2">
-              <Label htmlFor="date-format">Format de date</Label>
-              <Select defaultValue="dd-mm-yyyy">
-                <SelectTrigger id="date-format">
-                  <SelectValue placeholder="Sélectionner un format de date" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="dd-mm-yyyy">DD/MM/YYYY</SelectItem>
-                  <SelectItem value="mm-dd-yyyy">MM/DD/YYYY</SelectItem>
-                  <SelectItem value="yyyy-mm-dd">YYYY/MM/DD</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            
-            <Button onClick={handleSavePreferences}>Enregistrer les préférences</Button>
+        <CardContent className="space-y-6">
+          <div className="space-y-2">
+            <Label htmlFor="theme">Thème</Label>
+            <Select value={theme} onValueChange={(value) => handleThemeChange(value as 'light' | 'dark' | 'system')}>
+              <SelectTrigger id="theme" className="w-full">
+                <SelectValue placeholder="Sélectionner un thème" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="light">Clair</SelectItem>
+                <SelectItem value="dark">Sombre</SelectItem>
+                <SelectItem value="system">Système</SelectItem>
+              </SelectContent>
+            </Select>
+            <p className="text-sm text-muted-foreground mt-1">
+              Choisissez le thème qui convient le mieux à vos préférences.
+            </p>
           </div>
         </CardContent>
       </Card>
+      
+      <Card>
+        <CardHeader>
+          <CardTitle>Notifications</CardTitle>
+          <CardDescription>
+            Configurez comment et quand vous souhaitez être notifié.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          <div className="flex items-center justify-between">
+            <div className="space-y-0.5">
+              <Label htmlFor="notifications">Notifications dans l'application</Label>
+              <p className="text-sm text-muted-foreground">
+                Recevoir des notifications en temps réel dans l'application.
+              </p>
+            </div>
+            <Switch 
+              id="notifications" 
+              checked={notifications} 
+              onCheckedChange={setNotifications} 
+            />
+          </div>
+          
+          <Separator />
+          
+          <div className="flex items-center justify-between">
+            <div className="space-y-0.5">
+              <Label htmlFor="email-digest">Résumé par e-mail</Label>
+              <p className="text-sm text-muted-foreground">
+                Recevoir un résumé hebdomadaire des activités par e-mail.
+              </p>
+            </div>
+            <Switch 
+              id="email-digest" 
+              checked={emailDigest} 
+              onCheckedChange={setEmailDigest} 
+            />
+          </div>
+        </CardContent>
+      </Card>
+      
+      <div className="text-right">
+        <p className="text-sm text-muted-foreground flex items-center justify-end">
+          <Check className="h-4 w-4 mr-1 text-green-500" />
+          Les préférences sont enregistrées automatiquement
+        </p>
+      </div>
     </div>
   );
 };

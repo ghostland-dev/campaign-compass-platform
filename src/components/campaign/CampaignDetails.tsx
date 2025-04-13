@@ -10,14 +10,14 @@ interface CampaignDetailsContentProps {
 const CampaignDetailsContent: React.FC<CampaignDetailsContentProps> = ({ campaign }) => {
   return (
     <>
-      <div className="bg-white rounded-lg p-6 shadow-sm mb-8">
+      <div className="bg-card rounded-lg p-6 shadow-sm mb-8 border border-border">
         <h2 className="text-xl font-semibold mb-4">Description</h2>
-        <p className="text-gray-700">
+        <p className="text-muted-foreground">
           {campaign.description || "Aucune description disponible pour cette campagne."}
         </p>
       </div>
       
-      <div className="bg-white rounded-lg p-6 shadow-sm">
+      <div className="bg-card rounded-lg p-6 shadow-sm border border-border">
         <h2 className="text-xl font-semibold mb-4">Calendrier de la campagne</h2>
         <div className="flex items-center text-muted-foreground text-sm mb-6">
           <Calendar className="h-4 w-4 mr-2" />
