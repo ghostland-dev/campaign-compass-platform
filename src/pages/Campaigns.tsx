@@ -1,7 +1,7 @@
 
 import React from 'react';
 import Layout from '@/components/Layout';
-import CampaignModal from '@/components/CampaignModal';
+import CampaignModal from '@/components/campaign-modal';
 import { TabsContent } from "@/components/ui/tabs";
 import { useCampaigns } from '@/hooks/useCampaigns';
 import CampaignHeader from '@/components/campaigns/CampaignHeader';

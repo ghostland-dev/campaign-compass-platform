@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import Layout from '@/components/Layout';
 import CalendarWrapper from '@/components/CalendarWrapper';
-import CampaignModal from '@/components/CampaignModal';
+import CampaignModal from '@/components/campaign-modal';
 import { Campaign, CalendarEvent } from '@/types';
 import { 
   getCampaigns, 
