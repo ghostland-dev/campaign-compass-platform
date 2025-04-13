@@ -1,7 +1,7 @@
 
 import { z } from 'zod';
-import prisma from './prisma';
 import { hashSync, compareSync } from 'bcryptjs';
+import prisma from './prisma';
 
 // Validation schemas
 export const registerSchema = z.object({
@@ -41,13 +41,11 @@ export async function registerUser(input: RegisterInput) {
       email,
       password: hashedPassword,
       avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=random`,
+      role: "user",
     },
   });
   
-  // Remove password from returned user object
-  const { password: _, ...userWithoutPassword } = newUser;
-  
-  return userWithoutPassword;
+  return newUser;
 }
 
 export async function loginUser(input: LoginInput) {
@@ -69,8 +67,5 @@ export async function loginUser(input: LoginInput) {
     throw new Error("Email ou mot de passe incorrect");
   }
   
-  // Remove password from returned user object
-  const { password: _, ...userWithoutPassword } = user;
-  
-  return userWithoutPassword;
+  return user;
 }

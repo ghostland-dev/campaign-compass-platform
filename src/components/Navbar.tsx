@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Bell, Calendar, Menu, MessageSquare, Search, Settings, User } from 'lucide-react';
+import { Bell, Calendar, Menu, MessageSquare, Search, Settings, User, LogOut } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -12,6 +12,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { ThemeToggle } from './ThemeToggle';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface NavbarProps {
   toggleSidebar: () => void;
@@ -19,6 +20,7 @@ interface NavbarProps {
 
 const Navbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
   const navigate = useNavigate();
+  const { logout, user } = useAuth();
   
   return (
     <nav className="border-b bg-card">
@@ -56,7 +58,7 @@ const Navbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="relative h-8 w-8 rounded-full">
                 <img
-                  src="https://randomuser.me/api/portraits/women/44.jpg"
+                  src={user?.avatar || "https://randomuser.me/api/portraits/women/44.jpg"}
                   alt="Avatar"
                   className="h-8 w-8 rounded-full"
                 />
@@ -74,7 +76,8 @@ const Navbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
                 Paramètres
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={() => navigate('/landing')}>
+              <DropdownMenuItem onClick={logout}>
+                <LogOut className="mr-2 h-4 w-4" />
                 Déconnexion
               </DropdownMenuItem>
             </DropdownMenuContent>

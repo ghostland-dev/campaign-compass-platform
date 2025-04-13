@@ -3,6 +3,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { LoginInput, RegisterInput, loginUser, registerUser } from '@/lib/auth';
 import { useToast } from '@/hooks/use-toast';
+import { LogOut } from 'lucide-react';
 
 type User = {
   id: string;

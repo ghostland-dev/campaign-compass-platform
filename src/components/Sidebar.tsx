@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface SidebarProps {
   isOpen: boolean;
@@ -22,6 +23,7 @@ interface SidebarProps {
 
 const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
   const location = useLocation();
+  const { logout } = useAuth();
   
   const menuItems = [
     { icon: Home, label: 'Tableau de bord', path: '/' },
@@ -83,11 +85,13 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
           
           {/* Footer */}
           <div className="p-4 border-t">
-            <Button variant="ghost" className="w-full justify-start text-muted-foreground hover:text-foreground" asChild>
-              <Link to="/landing">
-                <LogOut className="h-5 w-5 mr-3" />
-                Déconnexion
-              </Link>
+            <Button 
+              variant="ghost" 
+              className="w-full justify-start text-muted-foreground hover:text-foreground"
+              onClick={logout}
+            >
+              <LogOut className="h-5 w-5 mr-3" />
+              Déconnexion
             </Button>
           </div>
         </div>
