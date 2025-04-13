@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { Bell, Calendar, Home, Menu, MessageSquare, Search, Settings, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
@@ -12,6 +13,8 @@ import {
 } from '@/components/ui/dropdown-menu';
 
 const Navbar = () => {
+  const navigate = useNavigate();
+  
   return (
     <nav className="border-b bg-white">
       <div className="flex h-16 items-center px-4 md:px-6">
@@ -19,10 +22,10 @@ const Navbar = () => {
           <Button variant="outline" size="icon" className="md:hidden">
             <Menu className="h-5 w-5" />
           </Button>
-          <div className="flex items-center gap-1">
+          <Link to="/" className="flex items-center gap-1">
             <Calendar className="h-6 w-6 text-marketing-primary" />
             <span className="text-xl font-bold text-marketing-primary">CampaignCompass</span>
-          </div>
+          </Link>
         </div>
         <div className="ml-auto flex items-center gap-2 md:gap-4">
           <Button variant="ghost" size="icon">
@@ -93,11 +96,11 @@ const Navbar = () => {
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Mon Compte</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>
+              <DropdownMenuItem onClick={() => navigate('/profile')}>
                 <User className="mr-2 h-4 w-4" />
                 Profil
               </DropdownMenuItem>
-              <DropdownMenuItem>
+              <DropdownMenuItem onClick={() => navigate('/settings')}>
                 <Settings className="mr-2 h-4 w-4" />
                 Paramètres
               </DropdownMenuItem>

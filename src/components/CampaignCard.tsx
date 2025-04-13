@@ -1,149 +1,154 @@
+
 import React from 'react';
-import { Calendar, Clock, Edit, MoreHorizontal, Trash2, Users } from 'lucide-react';
-import { format } from 'date-fns';
-import { fr } from 'date-fns/locale';
-import { Campaign } from '@/types';
+import { Link } from 'react-router-dom';
+import { Calendar, ExternalLink, MoreHorizontal, Trash2 } from 'lucide-react';
+import { Progress } from '@/components/ui/progress';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Badge } from '@/components/ui/badge';
-import { useToast } from '@/hooks/use-toast';
+import { Campaign } from '@/types';
 
 interface CampaignCardProps {
   campaign: Campaign;
-  onDelete?: (campaignId: string) => void;
+  onDelete: (id: string) => void;
 }
 
 const CampaignCard: React.FC<CampaignCardProps> = ({ campaign, onDelete }) => {
-  const { toast } = useToast();
+  // Calculate days left and progress
+  const calculateDaysLeft = () => {
+    const endDate = new Date(campaign.endDate);
+    const today = new Date();
+    
+    if (today > endDate) return 0;
+    
+    return Math.ceil((endDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
+  };
   
-  // Function to get status text in French
-  const getStatusText = (status: string) => {
-    const statuses: Record<string, string> = {
-      draft: 'Brouillon',
-      active: 'Active',
-      completed: 'Terminée',
-      paused: 'En pause',
-    };
-    return statuses[status] || status;
+  const calculateProgress = () => {
+    const endDate = new Date(campaign.endDate);
+    const startDate = new Date(campaign.startDate);
+    const today = new Date();
+    
+    if (today < startDate) return 0;
+    if (today > endDate) return 100;
+    
+    const totalDays = Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
+    const daysPassed = Math.ceil((today.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
+    
+    return Math.min(100, Math.max(0, Math.floor((daysPassed / totalDays) * 100)));
   };
-
-  // Function to get color for status
+  
+  const daysLeft = calculateDaysLeft();
+  const progress = calculateProgress();
+  
+  // Status color mapping
   const getStatusColor = (status: string) => {
-    const colors: Record<string, string> = {
-      draft: 'bg-gray-100 text-gray-600',
-      active: 'bg-green-100 text-green-600',
-      completed: 'bg-blue-100 text-blue-600',
-      paused: 'bg-amber-100 text-amber-600',
-    };
-    return colors[status] || 'bg-gray-100 text-gray-600';
-  };
-
-  // Function to get channel text in French
-  const getChannelText = (channel: string) => {
-    const channels: Record<string, string> = {
-      email: 'Email',
-      social: 'Réseaux sociaux',
-      blog: 'Blog',
-      ads: 'Publicités',
-      other: 'Autre',
-    };
-    return channels[channel] || channel;
-  };
-
-  // Format dates for display
-  const startDate = new Date(campaign.startDate);
-  const endDate = new Date(campaign.endDate);
-
-  const handleDelete = () => {
-    if (onDelete) {
-      onDelete(campaign.id);
-      toast({
-        title: "Campagne supprimée",
-        description: `La campagne "${campaign.title}" a été supprimée avec succès.`,
-      });
+    switch (status) {
+      case 'active':
+        return 'bg-green-100 text-green-800';
+      case 'planned':
+        return 'bg-blue-100 text-blue-800';
+      case 'completed':
+        return 'bg-gray-100 text-gray-800';
+      case 'paused':
+        return 'bg-yellow-100 text-yellow-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
     }
   };
-
+  
   return (
-    <div className="campaign-card animate-fade-in border rounded-lg bg-white shadow p-4">
-      <div className="flex items-start justify-between">
+    <div className="bg-white rounded-lg shadow-sm p-6">
+      <div className="flex justify-between items-start mb-4">
         <div>
-          <Badge className={getStatusColor(campaign.status)}>
-            {getStatusText(campaign.status)}
-          </Badge>
-          <h3 className="mt-2 font-medium text-lg">{campaign.title}</h3>
+          <Link to={`/campaign/${campaign.id}`} className="text-lg font-semibold hover:text-marketing-primary transition-colors">
+            {campaign.title}
+          </Link>
+          <div className="flex items-center mt-1">
+            <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(campaign.status)}`}>
+              {campaign.status === 'active' ? 'Active' : 
+               campaign.status === 'planned' ? 'Planifiée' : 
+               campaign.status === 'completed' ? 'Terminée' : 'En pause'}
+            </span>
+            <span className="ml-2 text-xs text-muted-foreground flex items-center">
+              <Calendar className="h-3 w-3 mr-1" /> 
+              {campaign.startDate}
+            </span>
+          </div>
         </div>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon" className="h-8 w-8">
-              <MoreHorizontal className="h-4 w-4" />
+            <Button variant="ghost" size="icon">
+              <MoreHorizontal className="h-5 w-5" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuItem className="flex gap-2 items-center">
-              <Edit className="h-4 w-4" />
-              Modifier
+            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem asChild>
+              <Link to={`/campaign/${campaign.id}`} className="flex items-center">
+                <ExternalLink className="mr-2 h-4 w-4" />
+                Voir les détails
+              </Link>
             </DropdownMenuItem>
-            <DropdownMenuItem 
-              className="flex gap-2 items-center text-destructive focus:text-destructive"
-              onClick={handleDelete}
-            >
-              <Trash2 className="h-4 w-4" />
+            <DropdownMenuItem onClick={() => onDelete(campaign.id)} className="text-red-600">
+              <Trash2 className="mr-2 h-4 w-4" />
               Supprimer
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-      <p className="text-sm text-muted-foreground mt-2 line-clamp-2">{campaign.description}</p>
-      <div className="flex items-center gap-2 mt-4 text-sm text-muted-foreground">
-        <Calendar className="h-4 w-4" />
-        <span>
-          {format(startDate, 'dd MMM', { locale: fr })} - {format(endDate, 'dd MMM yyyy', { locale: fr })}
-        </span>
-      </div>
-      <div className="flex flex-wrap gap-2 mt-4">
-        {campaign.channels.map((channel) => (
-          <Badge variant="outline" key={channel} className="text-xs">
-            {getChannelText(channel)}
-          </Badge>
-        ))}
-      </div>
-      {campaign.metrics && (
-        <div className="mt-4 pt-4 border-t border-gray-100">
-          <h4 className="text-sm font-medium mb-2">Performances</h4>
-          <div className="grid grid-cols-2 gap-2 text-sm">
-            <div>
-              <p className="text-muted-foreground">Impressions</p>
-              <p className="font-medium">{campaign.metrics.impressions.toLocaleString()}</p>
-            </div>
-            <div>
-              <p className="text-muted-foreground">Clics</p>
-              <p className="font-medium">{campaign.metrics.clicks.toLocaleString()}</p>
-            </div>
-            <div>
-              <p className="text-muted-foreground">Conversions</p>
-              <p className="font-medium">{campaign.metrics.conversions.toLocaleString()}</p>
-            </div>
-            <div>
-              <p className="text-muted-foreground">Engagement</p>
-              <p className="font-medium">{campaign.metrics.engagement}%</p>
-            </div>
-          </div>
+      
+      <p className="text-sm text-muted-foreground mb-4 line-clamp-2">
+        {campaign.description || "Aucune description disponible pour cette campagne."}
+      </p>
+      
+      <div className="mt-4">
+        <div className="flex justify-between text-sm mb-1">
+          <span className="text-muted-foreground">Progression</span>
+          <span className="font-medium">{progress}%</span>
         </div>
-      )}
-      <div className="mt-4 flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <Users className="h-4 w-4 text-muted-foreground" />
-          <span className="text-sm text-muted-foreground">{campaign.team.length} membres</span>
+        <Progress value={progress} className="h-2" />
+        <div className="mt-2 text-xs text-muted-foreground">
+          {daysLeft} jour{daysLeft !== 1 ? 's' : ''} restant{daysLeft !== 1 ? 's' : ''}
         </div>
-        <Button variant="outline" size="sm">
-          Voir détails
-        </Button>
+      </div>
+      
+      <div className="mt-4 flex">
+        <div className="flex -space-x-2">
+          {campaign.team.slice(0, 3).map((member, index) => (
+            <div 
+              key={index}
+              className="h-6 w-6 rounded-full bg-marketing-primary text-white flex items-center justify-center text-xs font-medium border-2 border-white"
+            >
+              {member.charAt(0).toUpperCase()}
+            </div>
+          ))}
+        </div>
+        <div className="flex ml-2 space-x-1">
+          {campaign.channels.slice(0, 2).map((channel, index) => (
+            <span 
+              key={index}
+              className="px-2 py-0.5 bg-gray-100 rounded-full text-xs"
+            >
+              {channel === 'email' ? 'Email' : 
+               channel === 'social' ? 'Social' : 
+               channel === 'web' ? 'Web' : 
+               channel === 'mobile' ? 'Mobile' : channel}
+            </span>
+          ))}
+          {campaign.channels.length > 2 && (
+            <span className="px-2 py-0.5 bg-gray-100 rounded-full text-xs">
+              +{campaign.channels.length - 2}
+            </span>
+          )}
+        </div>
       </div>
     </div>
   );
