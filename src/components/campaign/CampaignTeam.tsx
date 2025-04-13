@@ -11,7 +11,7 @@ const CampaignTeam: React.FC<CampaignTeamProps> = ({ team }) => {
       {team.slice(0, 3).map((member, index) => (
         <div 
           key={index}
-          className="h-6 w-6 rounded-full bg-marketing-primary text-white flex items-center justify-center text-xs font-medium border-2 border-white"
+          className="h-6 w-6 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-xs font-medium border-2 border-background"
         >
           {member.charAt(0).toUpperCase()}
         </div>
