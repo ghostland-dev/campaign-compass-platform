@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 
 const RecentActivity: React.FC = () => {
   return (
-    <div className="bg-white rounded-lg shadow p-4 mb-8">
+    <div className="bg-card rounded-lg shadow-sm border border-border p-4 mb-8">
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-xl font-semibold">Activité Récente</h2>
         <Button variant="ghost" size="sm">
@@ -14,7 +14,7 @@ const RecentActivity: React.FC = () => {
       </div>
       <div className="space-y-4">
         <div className="flex items-start gap-4">
-          <div className="h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600">
+          <div className="h-8 w-8 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 dark:text-blue-300">
             <Users className="h-4 w-4" />
           </div>
           <div>
@@ -23,7 +23,7 @@ const RecentActivity: React.FC = () => {
           </div>
         </div>
         <div className="flex items-start gap-4">
-          <div className="h-8 w-8 rounded-full bg-green-100 flex items-center justify-center text-green-600">
+          <div className="h-8 w-8 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center text-green-600 dark:text-green-300">
             <Check className="h-4 w-4" />
           </div>
           <div>
@@ -32,7 +32,7 @@ const RecentActivity: React.FC = () => {
           </div>
         </div>
         <div className="flex items-start gap-4">
-          <div className="h-8 w-8 rounded-full bg-red-100 flex items-center justify-center text-red-600">
+          <div className="h-8 w-8 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center text-red-600 dark:text-red-300">
             <Trash2 className="h-4 w-4" />
           </div>
           <div>
