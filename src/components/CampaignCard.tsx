@@ -52,7 +52,7 @@ const CampaignCard: React.FC<CampaignCardProps> = ({ campaign, onDelete }) => {
     switch (status) {
       case 'active':
         return 'bg-green-100 text-green-800';
-      case 'planned':
+      case 'draft':
         return 'bg-blue-100 text-blue-800';
       case 'completed':
         return 'bg-gray-100 text-gray-800';
@@ -73,7 +73,7 @@ const CampaignCard: React.FC<CampaignCardProps> = ({ campaign, onDelete }) => {
           <div className="flex items-center mt-1">
             <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(campaign.status)}`}>
               {campaign.status === 'active' ? 'Active' : 
-               campaign.status === 'planned' ? 'Planifiée' : 
+               campaign.status === 'draft' ? 'Planifiée' : 
                campaign.status === 'completed' ? 'Terminée' : 'En pause'}
             </span>
             <span className="ml-2 text-xs text-muted-foreground flex items-center">
@@ -139,8 +139,8 @@ const CampaignCard: React.FC<CampaignCardProps> = ({ campaign, onDelete }) => {
             >
               {channel === 'email' ? 'Email' : 
                channel === 'social' ? 'Social' : 
-               channel === 'web' ? 'Web' : 
-               channel === 'mobile' ? 'Mobile' : channel}
+               channel === 'blog' ? 'Blog' : 
+               channel === 'ads' ? 'Ads' : 'Autre'}
             </span>
           ))}
           {campaign.channels.length > 2 && (
