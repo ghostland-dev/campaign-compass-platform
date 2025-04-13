@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useToast } from '@/hooks/use-toast';
-import Navbar from '@/components/Navbar';
+import Layout from '@/components/Layout';
 import Calendar from '@/components/Calendar';
 import CampaignModal from '@/components/CampaignModal';
 import { Campaign, CalendarEvent } from '@/types';
@@ -95,42 +95,38 @@ const Dashboard = () => {
   };
   
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
-      <Navbar />
+    <Layout>
+      {/* Header with title and new campaign button */}
+      <DashboardHeader onCreateCampaign={() => setShowCampaignModal(true)} />
       
-      <main className="flex-1 container mx-auto px-4 py-8">
-        {/* Header with title and new campaign button */}
-        <DashboardHeader onCreateCampaign={() => setShowCampaignModal(true)} />
-        
-        {/* Stats overview cards */}
-        <StatsOverview />
-        
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-2">
-            {/* Campaign list with tabs */}
-            <CampaignList 
-              campaigns={campaigns} 
-              onDelete={handleDeleteCampaign}
-              onCreateCampaign={() => setShowCampaignModal(true)} 
-            />
-            
-            {/* Recent activity section */}
-            <RecentActivity />
-          </div>
+      {/* Stats overview cards */}
+      <StatsOverview />
+      
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-8">
+        <div className="lg:col-span-2">
+          {/* Campaign list with tabs */}
+          <CampaignList 
+            campaigns={campaigns} 
+            onDelete={handleDeleteCampaign}
+            onCreateCampaign={() => setShowCampaignModal(true)} 
+          />
           
-          <div>
-            <h2 className="text-xl font-semibold mb-4">Calendrier</h2>
-            <Calendar events={calendarEvents} />
-          </div>
+          {/* Recent activity section */}
+          <RecentActivity />
         </div>
-      </main>
+        
+        <div>
+          <h2 className="text-xl font-semibold mb-4">Calendrier</h2>
+          <Calendar events={calendarEvents} />
+        </div>
+      </div>
       
       <CampaignModal 
         open={showCampaignModal} 
         onOpenChange={setShowCampaignModal}
         onSubmit={handleCreateCampaign}
       />
-    </div>
+    </Layout>
   );
 };
 

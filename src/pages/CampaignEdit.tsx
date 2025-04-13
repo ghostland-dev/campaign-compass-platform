@@ -8,7 +8,7 @@ import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import { CalendarIcon, ArrowLeft } from 'lucide-react';
 
-import Navbar from '@/components/Navbar';
+import Layout from '@/components/Layout';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { Campaign, Channel } from '@/types';
@@ -124,250 +124,241 @@ const CampaignEdit = () => {
   
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex flex-col">
-        <Navbar />
-        <main className="flex-1 container mx-auto px-4 py-8">
-          <div className="flex items-center justify-center h-64">
-            <p>Chargement de la campagne...</p>
-          </div>
-        </main>
-      </div>
+      <Layout>
+        <div className="flex items-center justify-center h-64">
+          <p>Chargement de la campagne...</p>
+        </div>
+      </Layout>
     );
   }
 
   if (!campaign) {
     return (
-      <div className="min-h-screen bg-gray-50 flex flex-col">
-        <Navbar />
-        <main className="flex-1 container mx-auto px-4 py-8">
-          <div className="flex items-center justify-center h-64">
-            <p>Campagne non trouvée.</p>
-            <Button variant="link" onClick={() => navigate('/')}>
-              Retour au tableau de bord
-            </Button>
-          </div>
-        </main>
-      </div>
+      <Layout>
+        <div className="flex items-center justify-center h-64">
+          <p>Campagne non trouvée.</p>
+          <Button variant="link" onClick={() => navigate('/')}>
+            Retour au tableau de bord
+          </Button>
+        </div>
+      </Layout>
     );
   }
   
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
-      <Navbar />
-      <main className="flex-1 container mx-auto px-4 py-8">
-        <div className="mb-8">
-          <Button variant="outline" onClick={() => navigate(`/campaign/${id}`)}>
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            Retour aux détails de la campagne
-          </Button>
-        </div>
-        
-        <div className="mb-6">
-          <h1 className="text-3xl font-bold">Modifier la campagne</h1>
-          <p className="text-muted-foreground mt-2">
-            Modifiez les détails de votre campagne marketing.
-          </p>
-        </div>
-        
-        <Card>
-          <CardHeader>
-            <CardTitle>Informations de la campagne</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <Form {...form}>
-              <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
+    <Layout>
+      <div className="mb-8">
+        <Button variant="outline" onClick={() => navigate(`/campaign/${id}`)}>
+          <ArrowLeft className="mr-2 h-4 w-4" />
+          Retour aux détails de la campagne
+        </Button>
+      </div>
+      
+      <div className="mb-6">
+        <h1 className="text-3xl font-bold">Modifier la campagne</h1>
+        <p className="text-muted-foreground mt-2">
+          Modifiez les détails de votre campagne marketing.
+        </p>
+      </div>
+      
+      <Card>
+        <CardHeader>
+          <CardTitle>Informations de la campagne</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
+              <FormField
+                control={form.control}
+                name="title"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Titre</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Titre de la campagne" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              
+              <FormField
+                control={form.control}
+                name="description"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Description</FormLabel>
+                    <FormControl>
+                      <Textarea placeholder="Description de la campagne" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <FormField
                   control={form.control}
-                  name="title"
+                  name="startDate"
                   render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Titre</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Titre de la campagne" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                
-                <FormField
-                  control={form.control}
-                  name="description"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Description</FormLabel>
-                      <FormControl>
-                        <Textarea placeholder="Description de la campagne" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <FormField
-                    control={form.control}
-                    name="startDate"
-                    render={({ field }) => (
-                      <FormItem className="flex flex-col">
-                        <FormLabel>Date de début</FormLabel>
-                        <Popover>
-                          <PopoverTrigger asChild>
-                            <FormControl>
-                              <Button
-                                variant="outline"
-                                className="pl-3 text-left font-normal"
-                              >
-                                {field.value ? (
-                                  format(field.value, 'P', { locale: fr })
-                                ) : (
-                                  <span>Sélectionner une date</span>
-                                )}
-                                <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                              </Button>
-                            </FormControl>
-                          </PopoverTrigger>
-                          <PopoverContent className="w-auto p-0" align="start">
-                            <Calendar
-                              mode="single"
-                              selected={field.value}
-                              onSelect={field.onChange}
-                              initialFocus
-                              className="p-3 pointer-events-auto"
-                            />
-                          </PopoverContent>
-                        </Popover>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  
-                  <FormField
-                    control={form.control}
-                    name="endDate"
-                    render={({ field }) => (
-                      <FormItem className="flex flex-col">
-                        <FormLabel>Date de fin</FormLabel>
-                        <Popover>
-                          <PopoverTrigger asChild>
-                            <FormControl>
-                              <Button
-                                variant="outline"
-                                className="pl-3 text-left font-normal"
-                              >
-                                {field.value ? (
-                                  format(field.value, 'P', { locale: fr })
-                                ) : (
-                                  <span>Sélectionner une date</span>
-                                )}
-                                <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                              </Button>
-                            </FormControl>
-                          </PopoverTrigger>
-                          <PopoverContent className="w-auto p-0" align="start">
-                            <Calendar
-                              mode="single"
-                              selected={field.value}
-                              onSelect={field.onChange}
-                              initialFocus
-                              className="p-3 pointer-events-auto"
-                            />
-                          </PopoverContent>
-                        </Popover>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-                
-                <FormField
-                  control={form.control}
-                  name="status"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Statut</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Sélectionnez un statut" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          <SelectItem value="draft">Brouillon</SelectItem>
-                          <SelectItem value="active">Active</SelectItem>
-                          <SelectItem value="paused">En pause</SelectItem>
-                          <SelectItem value="completed">Terminée</SelectItem>
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                
-                <FormField
-                  control={form.control}
-                  name="channels"
-                  render={() => (
-                    <FormItem>
-                      <div className="mb-2">
-                        <FormLabel>Canaux</FormLabel>
-                      </div>
-                      <div className="grid grid-cols-2 gap-2">
-                        {channelOptions.map((channel) => (
-                          <FormField
-                            key={channel.id}
-                            control={form.control}
-                            name="channels"
-                            render={({ field }) => {
-                              return (
-                                <FormItem
-                                  key={channel.id}
-                                  className="flex flex-row items-start space-x-3 space-y-0"
-                                >
-                                  <FormControl>
-                                    <Checkbox
-                                      checked={field.value?.includes(channel.id)}
-                                      onCheckedChange={(checked) => {
-                                        return checked
-                                          ? field.onChange([...field.value, channel.id])
-                                          : field.onChange(
-                                              field.value?.filter(
-                                                (value) => value !== channel.id
-                                              )
-                                            );
-                                      }}
-                                    />
-                                  </FormControl>
-                                  <FormLabel className="font-normal">
-                                    {channel.label}
-                                  </FormLabel>
-                                </FormItem>
-                              );
-                            }}
+                    <FormItem className="flex flex-col">
+                      <FormLabel>Date de début</FormLabel>
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <FormControl>
+                            <Button
+                              variant="outline"
+                              className="pl-3 text-left font-normal"
+                            >
+                              {field.value ? (
+                                format(field.value, 'P', { locale: fr })
+                              ) : (
+                                <span>Sélectionner une date</span>
+                              )}
+                              <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                            </Button>
+                          </FormControl>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0" align="start">
+                          <Calendar
+                            mode="single"
+                            selected={field.value}
+                            onSelect={field.onChange}
+                            initialFocus
+                            className="p-3 pointer-events-auto"
                           />
-                        ))}
-                      </div>
+                        </PopoverContent>
+                      </Popover>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
                 
-                <div className="flex justify-end space-x-2 pt-4">
-                  <Button 
-                    type="button" 
-                    variant="outline" 
-                    onClick={() => navigate(`/campaign/${id}`)}
-                  >
-                    Annuler
-                  </Button>
-                  <Button type="submit">Enregistrer les modifications</Button>
-                </div>
-              </form>
-            </Form>
-          </CardContent>
-        </Card>
-      </main>
-    </div>
+                <FormField
+                  control={form.control}
+                  name="endDate"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-col">
+                      <FormLabel>Date de fin</FormLabel>
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <FormControl>
+                            <Button
+                              variant="outline"
+                              className="pl-3 text-left font-normal"
+                            >
+                              {field.value ? (
+                                format(field.value, 'P', { locale: fr })
+                              ) : (
+                                <span>Sélectionner une date</span>
+                              )}
+                              <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                            </Button>
+                          </FormControl>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0" align="start">
+                          <Calendar
+                            mode="single"
+                            selected={field.value}
+                            onSelect={field.onChange}
+                            initialFocus
+                            className="p-3 pointer-events-auto"
+                          />
+                        </PopoverContent>
+                      </Popover>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              
+              <FormField
+                control={form.control}
+                name="status"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Statut</FormLabel>
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Sélectionnez un statut" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="draft">Brouillon</SelectItem>
+                        <SelectItem value="active">Active</SelectItem>
+                        <SelectItem value="paused">En pause</SelectItem>
+                        <SelectItem value="completed">Terminée</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              
+              <FormField
+                control={form.control}
+                name="channels"
+                render={() => (
+                  <FormItem>
+                    <div className="mb-2">
+                      <FormLabel>Canaux</FormLabel>
+                    </div>
+                    <div className="grid grid-cols-2 gap-2">
+                      {channelOptions.map((channel) => (
+                        <FormField
+                          key={channel.id}
+                          control={form.control}
+                          name="channels"
+                          render={({ field }) => {
+                            return (
+                              <FormItem
+                                key={channel.id}
+                                className="flex flex-row items-start space-x-3 space-y-0"
+                              >
+                                <FormControl>
+                                  <Checkbox
+                                    checked={field.value?.includes(channel.id)}
+                                    onCheckedChange={(checked) => {
+                                      return checked
+                                        ? field.onChange([...field.value, channel.id])
+                                        : field.onChange(
+                                            field.value?.filter(
+                                              (value) => value !== channel.id
+                                            )
+                                          );
+                                    }}
+                                  />
+                                </FormControl>
+                                <FormLabel className="font-normal">
+                                  {channel.label}
+                                </FormLabel>
+                              </FormItem>
+                            );
+                          }}
+                        />
+                      ))}
+                    </div>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              
+              <div className="flex justify-end space-x-2 pt-4">
+                <Button 
+                  type="button" 
+                  variant="outline" 
+                  onClick={() => navigate(`/campaign/${id}`)}
+                >
+                  Annuler
+                </Button>
+                <Button type="submit">Enregistrer les modifications</Button>
+              </div>
+            </form>
+          </Form>
+        </CardContent>
+      </Card>
+    </Layout>
   );
 };
 

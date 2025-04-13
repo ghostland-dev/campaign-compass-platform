@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Bell, Calendar, Home, Menu, MessageSquare, Search, Settings, User } from 'lucide-react';
+import { Bell, Calendar, Menu, MessageSquare, Search, Settings, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -11,78 +11,47 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { ThemeToggle } from './ThemeToggle';
 
-const Navbar = () => {
+interface NavbarProps {
+  toggleSidebar: () => void;
+}
+
+const Navbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
   const navigate = useNavigate();
   
   return (
     <nav className="border-b bg-white">
       <div className="flex h-16 items-center px-4 md:px-6">
         <div className="flex items-center gap-2 md:gap-4">
-          <Button variant="outline" size="icon" className="md:hidden">
+          <Button variant="outline" size="icon" className="md:hidden" onClick={toggleSidebar}>
             <Menu className="h-5 w-5" />
           </Button>
-          <Link to="/" className="flex items-center gap-1">
+          <Link to="/" className="flex items-center gap-1 md:hidden">
             <Calendar className="h-6 w-6 text-marketing-primary" />
-            <span className="text-xl font-bold text-marketing-primary">CampaignCompass</span>
+            <span className="text-xl font-bold text-marketing-primary">CC</span>
           </Link>
         </div>
-        <div className="ml-auto flex items-center gap-2 md:gap-4">
+        
+        <div className="flex-1 ml-4">
+          <div className="relative md:w-72">
+            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+            <input
+              type="search"
+              placeholder="Rechercher..."
+              className="pl-8 h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+            />
+          </div>
+        </div>
+        
+        <div className="flex items-center gap-2 md:gap-4">
+          <ThemeToggle />
           <Button variant="ghost" size="icon">
-            <Search className="h-5 w-5" />
+            <Bell className="h-5 w-5" />
           </Button>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" className="relative">
-                <Bell className="h-5 w-5" />
-                <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-marketing-primary text-[10px] text-white">
-                  3
-                </span>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Notifications</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem className="flex flex-col items-start gap-1">
-                <span className="text-sm font-medium">Nouvelle campagne créée</span>
-                <span className="text-xs text-muted-foreground">Il y a 10 minutes</span>
-              </DropdownMenuItem>
-              <DropdownMenuItem className="flex flex-col items-start gap-1">
-                <span className="text-sm font-medium">Publication programmée</span>
-                <span className="text-xs text-muted-foreground">Il y a 1 heure</span>
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem className="justify-center text-center">
-                <span className="text-sm text-muted-foreground">Voir toutes les notifications</span>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" className="relative">
-                <MessageSquare className="h-5 w-5" />
-                <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-marketing-primary text-[10px] text-white">
-                  2
-                </span>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Messages</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem className="flex flex-col items-start gap-1">
-                <span className="text-sm font-medium">Thomas a commenté</span>
-                <span className="text-xs text-muted-foreground">Il y a 5 minutes</span>
-              </DropdownMenuItem>
-              <DropdownMenuItem className="flex flex-col items-start gap-1">
-                <span className="text-sm font-medium">Julie a approuvé</span>
-                <span className="text-xs text-muted-foreground">Il y a 30 minutes</span>
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem className="justify-center text-center">
-                <span className="text-sm text-muted-foreground">Voir tous les messages</span>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <Button variant="ghost" size="icon">
+            <MessageSquare className="h-5 w-5" />
+          </Button>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="relative h-8 w-8 rounded-full">
@@ -105,7 +74,7 @@ const Navbar = () => {
                 Paramètres
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>
+              <DropdownMenuItem onClick={() => navigate('/landing')}>
                 Déconnexion
               </DropdownMenuItem>
             </DropdownMenuContent>

@@ -1,7 +1,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import Navbar from '@/components/Navbar';
+import Layout from '@/components/Layout';
 import { useToast } from '@/hooks/use-toast';
 import { Campaign } from '@/types';
 import { getCampaigns, deleteCampaign, deleteCalendarEventsForCampaign } from '@/services/storageService';
@@ -55,14 +55,11 @@ const CampaignDetails = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
-      <Navbar />
-      <main className="flex-1 container mx-auto px-4 py-8">
-        <CampaignHeader campaign={campaign} onDelete={handleDelete} />
-        <CampaignMetrics campaign={campaign} />
-        <CampaignDetailsContent campaign={campaign} />
-      </main>
-    </div>
+    <Layout>
+      <CampaignHeader campaign={campaign} onDelete={handleDelete} />
+      <CampaignMetrics campaign={campaign} />
+      <CampaignDetailsContent campaign={campaign} />
+    </Layout>
   );
 };
 
