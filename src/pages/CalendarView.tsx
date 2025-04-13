@@ -1,14 +1,18 @@
+
 import React, { useState, useEffect } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import Layout from '@/components/Layout';
 import CalendarDetailed from '@/components/CalendarDetailed';
 import { getCalendarEvents } from '@/services/storageService';
-import { CalendarEvent } from '@/types';
+import { CalendarEvent, Campaign } from '@/types';
 import { mockCalendarEvents } from '@/data/mockData';
 
 const CalendarView = () => {
   const [calendarEvents, setCalendarEvents] = useState<CalendarEvent[]>([]);
   const { toast } = useToast();
+  
+  // Add empty campaigns array to pass to CalendarDetailed
+  const [campaigns, setCampaigns] = useState<Campaign[]>([]);
   
   useEffect(() => {
     // Load events from localStorage
@@ -68,7 +72,7 @@ const CalendarView = () => {
       </div>
       
       <div className="bg-card text-card-foreground rounded-lg shadow-sm border border-border p-6">
-        <CalendarDetailed events={calendarEvents} />
+        <CalendarDetailed events={calendarEvents} campaigns={campaigns} />
       </div>
     </Layout>
   );

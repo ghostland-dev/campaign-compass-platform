@@ -1,6 +1,6 @@
 
 import React from 'react';
-import Calendar from './Calendar';
+import { Calendar } from './Calendar';
 import { cn } from '@/lib/utils';
 
 interface CalendarWrapperProps {
