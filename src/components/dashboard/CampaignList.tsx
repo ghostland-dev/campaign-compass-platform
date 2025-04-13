@@ -45,7 +45,7 @@ const CampaignList: React.FC<CampaignListProps> = ({
               />
             ))
           ) : (
-            <div className="col-span-2 text-center py-8 bg-gray-50 rounded-lg border border-dashed">
+            <div className="col-span-2 text-center py-8 bg-muted dark:bg-muted/40 rounded-lg border border-dashed">
               <p className="text-muted-foreground">Aucune campagne disponible</p>
               <Button 
                 className="mt-4" 
@@ -69,7 +69,7 @@ const CampaignList: React.FC<CampaignListProps> = ({
               />
             ))
           ) : (
-            <div className="col-span-2 text-center py-8 bg-gray-50 rounded-lg border border-dashed">
+            <div className="col-span-2 text-center py-8 bg-muted dark:bg-muted/40 rounded-lg border border-dashed">
               <p className="text-muted-foreground">Aucune campagne active</p>
               <Button 
                 className="mt-4" 
@@ -93,7 +93,7 @@ const CampaignList: React.FC<CampaignListProps> = ({
               />
             ))
           ) : (
-            <div className="col-span-2 text-center py-8 bg-gray-50 rounded-lg border border-dashed">
+            <div className="col-span-2 text-center py-8 bg-muted dark:bg-muted/40 rounded-lg border border-dashed">
               <p className="text-muted-foreground">Aucun brouillon disponible</p>
               <Button 
                 className="mt-4" 
@@ -117,7 +117,7 @@ const CampaignList: React.FC<CampaignListProps> = ({
               />
             ))
           ) : (
-            <div className="col-span-2 text-center py-8 bg-gray-50 rounded-lg border border-dashed">
+            <div className="col-span-2 text-center py-8 bg-muted dark:bg-muted/40 rounded-lg border border-dashed">
               <p className="text-muted-foreground">Aucune campagne terminée</p>
             </div>
           )}
