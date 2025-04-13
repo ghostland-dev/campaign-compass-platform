@@ -8,20 +8,22 @@ export const formSchema = z.object({
   startDate: z.date({ required_error: 'La date de début est requise' }),
   endDate: z.date({ required_error: 'La date de fin est requise' }),
   status: z.enum(['draft', 'active', 'paused', 'completed'] as const),
-  channels: z.array(z.string()).min(1, { message: 'Sélectionnez au moins un canal' }),
+  channels: z.array(z.string().refine((val): val is Channel => {
+    return ['email', 'social', 'blog', 'ads', 'sms', 'smtp', 'other'].includes(val);
+  }, { message: 'Canal invalide' })),
   channelDetails: z.object({
     sms: z.object({
-      message: z.string().optional(),
-      recipients: z.number().optional(),
+      message: z.string(),
+      recipients: z.number(),
     }).optional(),
     smtp: z.object({
-      subject: z.string().optional(),
-      template: z.string().optional(),
-      recipients: z.number().optional(),
+      subject: z.string(),
+      template: z.string(),
+      recipients: z.number(),
     }).optional(),
     social: z.object({
-      platforms: z.array(z.string()).optional(),
-      content: z.string().optional(),
+      platforms: z.array(z.string()),
+      content: z.string(),
     }).optional(),
   }).optional(),
 });
@@ -29,13 +31,13 @@ export const formSchema = z.object({
 export type CampaignFormValues = z.infer<typeof formSchema>;
 
 export const channelOptions = [
-  { id: 'email', label: 'Email' },
-  { id: 'social', label: 'Réseaux sociaux' },
-  { id: 'blog', label: 'Blog' },
-  { id: 'ads', label: 'Publicités' },
-  { id: 'sms', label: 'SMS' },
-  { id: 'smtp', label: 'SMTP (Email avancé)' },
-  { id: 'other', label: 'Autre' },
+  { id: 'email' as Channel, label: 'Email' },
+  { id: 'social' as Channel, label: 'Réseaux sociaux' },
+  { id: 'blog' as Channel, label: 'Blog' },
+  { id: 'ads' as Channel, label: 'Publicités' },
+  { id: 'sms' as Channel, label: 'SMS' },
+  { id: 'smtp' as Channel, label: 'SMTP (Email avancé)' },
+  { id: 'other' as Channel, label: 'Autre' },
 ];
 
 export const socialPlatformOptions = [

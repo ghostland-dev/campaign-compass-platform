@@ -4,7 +4,7 @@ import { useToast } from '@/hooks/use-toast';
 import Layout from '@/components/Layout';
 import CalendarWrapper from '@/components/CalendarWrapper';
 import CampaignModal from '@/components/campaign-modal';
-import { Campaign, CalendarEvent } from '@/types';
+import { Campaign, CalendarEvent, Channel } from '@/types';
 import { 
   getCampaigns, 
   saveCampaigns, 
@@ -57,10 +57,14 @@ const Dashboard = () => {
       status: formData.status,
       startDate: formData.startDate.toISOString().split('T')[0],
       endDate: formData.endDate.toISOString().split('T')[0],
-      channels: formData.channels,
+      channels: formData.channels as Channel[],
       owner: 'user1',
       team: ['team1'],
-      channelDetails: formData.channelDetails,
+      channelDetails: formData.channelDetails || {
+        sms: { message: '', recipients: 0 },
+        smtp: { subject: '', template: '', recipients: 0 },
+        social: { platforms: [], content: '' }
+      },
     };
     
     // Ajouter la campagne et mettre à jour l'état

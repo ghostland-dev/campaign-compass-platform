@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Layout from '@/components/Layout';
 import { useToast } from '@/hooks/use-toast';
-import { Campaign } from '@/types';
+import { Campaign, Channel } from '@/types';
 import { getCampaigns, updateCampaign } from '@/services/storageService';
 import CampaignForm from '@/components/campaign-modal/CampaignForm';
 import { Button } from '@/components/ui/button';
@@ -43,8 +43,12 @@ const CampaignEdit = () => {
       status: formData.status,
       startDate: formData.startDate.toISOString().split('T')[0],
       endDate: formData.endDate.toISOString().split('T')[0],
-      channels: formData.channels,
-      channelDetails: formData.channelDetails,
+      channels: formData.channels as Channel[],
+      channelDetails: formData.channelDetails || {
+        sms: { message: '', recipients: 0 },
+        smtp: { subject: '', template: '', recipients: 0 },
+        social: { platforms: [], content: '' }
+      },
     };
     
     updateCampaign(updatedCampaign);
@@ -88,13 +92,13 @@ const CampaignEdit = () => {
   }
 
   const formInitialValues: CampaignFormValues = {
-    title: campaign.title,
-    description: campaign.description,
-    status: campaign.status,
-    startDate: new Date(campaign.startDate),
-    endDate: new Date(campaign.endDate),
-    channels: campaign.channels,
-    channelDetails: campaign.channelDetails || {
+    title: campaign?.title || '',
+    description: campaign?.description || '',
+    status: campaign?.status || 'draft',
+    startDate: new Date(campaign?.startDate || new Date()),
+    endDate: new Date(campaign?.endDate || new Date()),
+    channels: campaign?.channels as Channel[] || [],
+    channelDetails: campaign?.channelDetails || {
       sms: { message: '', recipients: 0 },
       smtp: { subject: '', template: '', recipients: 0 },
       social: { platforms: [], content: '' }
