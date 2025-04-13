@@ -37,14 +37,14 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
       {/* Overlay for mobile */}
       {isOpen && (
         <div 
-          className="fixed inset-0 bg-black/50 z-40 md:hidden" 
+          className="fixed inset-0 bg-black/50 z-40 md:hidden dark:bg-black/80" 
           onClick={toggleSidebar}
         />
       )}
       
       {/* Sidebar */}
       <div className={cn(
-        "fixed inset-y-0 left-0 z-50 w-64 bg-white border-r transform transition-transform duration-300 ease-in-out",
+        "fixed inset-y-0 left-0 z-50 w-64 border-r transform transition-transform duration-300 ease-in-out bg-card",
         isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
       )}>
         <div className="flex flex-col h-full">
@@ -69,8 +69,8 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
                     className={cn(
                       "flex items-center px-4 py-2 rounded-md text-sm font-medium transition-colors",
                       location.pathname === item.path
-                        ? "bg-gray-100 text-marketing-primary"
-                        : "text-gray-600 hover:bg-gray-50 hover:text-marketing-primary"
+                        ? "bg-primary/10 text-primary"
+                        : "text-muted-foreground hover:bg-muted hover:text-foreground"
                     )}
                   >
                     <item.icon className="h-5 w-5 mr-3" />
@@ -83,8 +83,8 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
           
           {/* Footer */}
           <div className="p-4 border-t">
-            <Button variant="ghost" className="w-full justify-start" asChild>
-              <Link to="/landing" className="text-gray-600">
+            <Button variant="ghost" className="w-full justify-start text-muted-foreground hover:text-foreground" asChild>
+              <Link to="/landing">
                 <LogOut className="h-5 w-5 mr-3" />
                 Déconnexion
               </Link>

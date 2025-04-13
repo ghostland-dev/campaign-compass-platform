@@ -43,7 +43,7 @@ const CampaignCard: React.FC<CampaignCardProps> = ({ campaign, onDelete }) => {
   const progress = calculateProgress();
   
   return (
-    <div className="bg-white rounded-lg shadow-sm p-6">
+    <div className="bg-card text-card-foreground rounded-lg shadow-sm p-6">
       <div className="flex justify-between items-start mb-4">
         <div>
           <Link to={`/campaign/${campaign.id}`} className="text-lg font-semibold hover:text-marketing-primary transition-colors">

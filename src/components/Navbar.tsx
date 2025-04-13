@@ -21,7 +21,7 @@ const Navbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
   const navigate = useNavigate();
   
   return (
-    <nav className="border-b bg-white">
+    <nav className="border-b bg-card">
       <div className="flex h-16 items-center px-4 md:px-6">
         <div className="flex items-center gap-2 md:gap-4">
           <Button variant="outline" size="icon" className="md:hidden" onClick={toggleSidebar}>

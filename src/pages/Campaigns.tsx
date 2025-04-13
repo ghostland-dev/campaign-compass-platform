@@ -155,7 +155,7 @@ const Campaigns = () => {
               />
             ))
           ) : (
-            <div className="col-span-full text-center py-12">
+            <div className="col-span-full text-center py-12 bg-card rounded-lg shadow-sm">
               <p className="text-muted-foreground">
                 {searchTerm.trim() 
                   ? "Aucune campagne ne correspond à votre recherche."
