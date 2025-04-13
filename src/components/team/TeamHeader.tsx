@@ -53,7 +53,7 @@ const TeamHeader: React.FC<TeamHeaderProps> = ({
             <SelectValue placeholder="Filtrer par rôle" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="">Tous les rôles</SelectItem>
+            <SelectItem value="all">Tous les rôles</SelectItem>
             {availableRoles.map(role => (
               <SelectItem key={role} value={role}>
                 {role}

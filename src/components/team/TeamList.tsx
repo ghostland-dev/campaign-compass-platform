@@ -22,12 +22,12 @@ const TeamList: React.FC<TeamListProps> = ({
 }) => {
   // Filter members based on search term and role filter
   const filteredMembers = members.filter(member => {
-    const matchesSearch = searchTerm === '' || 
+    const matchesSearch = !searchTerm || 
       member.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       member.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      member.role.toLowerCase().includes(searchTerm.toLowerCase());
+      (member.role && member.role.toLowerCase().includes(searchTerm.toLowerCase()));
     
-    const matchesRole = roleFilter === '' || member.role === roleFilter;
+    const matchesRole = roleFilter === 'all' || member.role === roleFilter;
     
     return matchesSearch && matchesRole;
   });

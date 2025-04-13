@@ -19,7 +19,7 @@ const Team = () => {
   const [memberToDelete, setMemberToDelete] = useState<TeamMember | null>(null);
   const [memberToView, setMemberToView] = useState<TeamMember | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
-  const [roleFilter, setRoleFilter] = useState('');
+  const [roleFilter, setRoleFilter] = useState('all');
   
   // Get unique roles from members for filtering
   const availableRoles = [...new Set(members.map(member => member.role))];
