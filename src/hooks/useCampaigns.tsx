@@ -1,7 +1,14 @@
 
 import { useState, useEffect } from 'react';
 import { Campaign, CalendarEvent } from '@/types';
-import { getCampaigns, deleteCampaign, deleteCalendarEventsForCampaign, addCampaign, addCalendarEvent } from '@/services/storageService';
+import { 
+  getCampaigns, 
+  deleteCampaign, 
+  deleteCalendarEventsForCampaign, 
+  addCampaign, 
+  addCalendarEvent,
+  updateCampaign
+} from '@/services/storageService';
 import { useToast } from '@/hooks/use-toast';
 
 export function useCampaigns() {
@@ -13,9 +20,32 @@ export function useCampaigns() {
   const [activeTab, setActiveTab] = useState<string>("all");
   const { toast } = useToast();
 
+  // Charger les campagnes depuis localStorage au chargement
   useEffect(() => {
     loadCampaigns();
+    
+    // Récupérer la préférence d'affichage (grille/liste) depuis localStorage si disponible
+    const viewPreference = localStorage.getItem('campaignViewPreference');
+    if (viewPreference) {
+      setIsGridView(viewPreference === 'grid');
+    }
+    
+    // Récupérer l'onglet actif depuis localStorage si disponible
+    const savedTab = localStorage.getItem('campaignActiveTab');
+    if (savedTab) {
+      setActiveTab(savedTab);
+    }
   }, []);
+  
+  // Sauvegarder les préférences d'affichage dans localStorage lorsqu'elles changent
+  useEffect(() => {
+    localStorage.setItem('campaignViewPreference', isGridView ? 'grid' : 'list');
+  }, [isGridView]);
+  
+  // Sauvegarder l'onglet actif dans localStorage lorsqu'il change
+  useEffect(() => {
+    localStorage.setItem('campaignActiveTab', activeTab);
+  }, [activeTab]);
   
   useEffect(() => {
     filterCampaigns();
@@ -110,8 +140,20 @@ export function useCampaigns() {
     });
   };
 
+  // Fonction pour mettre à jour une campagne existante
+  const handleUpdateCampaign = (updatedCampaign: Campaign) => {
+    updateCampaign(updatedCampaign);
+    loadCampaigns(); // Recharger les campagnes pour refléter les changements
+    
+    toast({
+      title: "Campagne mise à jour",
+      description: `La campagne "${updatedCampaign.title}" a été mise à jour avec succès.`,
+    });
+  };
+
   return {
     campaigns: filteredCampaigns,
+    allCampaigns: campaigns,
     searchTerm,
     setSearchTerm,
     isGridView,
@@ -121,6 +163,8 @@ export function useCampaigns() {
     activeTab,
     setActiveTab,
     handleCreateCampaign,
-    handleDeleteCampaign
+    handleDeleteCampaign,
+    handleUpdateCampaign,
+    refreshCampaigns: loadCampaigns
   };
 }

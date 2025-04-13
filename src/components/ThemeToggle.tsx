@@ -9,25 +9,20 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { getThemePreference, saveThemePreference } from '@/services/storageService';
 
 export function ThemeToggle() {
   const [theme, setTheme] = useState<'light' | 'dark' | 'system'>('system');
 
   useEffect(() => {
-    // Check if theme is set in localStorage
-    const storedTheme = localStorage.getItem('theme') as 'light' | 'dark' | 'system' | null;
+    // Récupérer le thème depuis localStorage
+    const storedTheme = getThemePreference();
+    setTheme(storedTheme);
     
-    if (storedTheme) {
-      setTheme(storedTheme);
-    } else {
-      // Default to system preference
-      setTheme('system');
-    }
-    
-    // Apply the theme
-    applyTheme(storedTheme || 'system');
+    // Appliquer le thème
+    applyTheme(storedTheme);
 
-    // Listen for changes to the system theme
+    // Écouter les changements de préférence du système
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
     const handleChange = () => {
       if (theme === 'system') {
@@ -53,18 +48,18 @@ export function ThemeToggle() {
 
   const setThemePreference = (newTheme: 'light' | 'dark' | 'system') => {
     setTheme(newTheme);
-    localStorage.setItem('theme', newTheme);
+    saveThemePreference(newTheme);
     applyTheme(newTheme);
   };
 
-  // Get the icon for the current theme
+  // Obtenir l'icône pour le thème actuel
   const getThemeIcon = () => {
     if (theme === 'dark') return <Sun className="h-5 w-5" />;
     if (theme === 'light') return <Moon className="h-5 w-5" />;
     return <Monitor className="h-5 w-5" />;
   };
 
-  // Get the tooltip text based on theme
+  // Obtenir le texte de l'infobulle en fonction du thème
   const getTooltipText = () => {
     if (theme === 'dark') return 'Changer de thème (Sombre)';
     if (theme === 'light') return 'Changer de thème (Clair)';
