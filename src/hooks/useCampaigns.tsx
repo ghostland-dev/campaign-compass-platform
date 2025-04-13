@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { Campaign, CalendarEvent, Channel } from '@/types';
 import { 
@@ -72,12 +73,6 @@ export function useCampaigns() {
   };
   
   const handleCreateCampaign = (formData: CampaignFormValues) => {
-    const defaultChannelDetails = {
-      sms: { message: '', recipients: 0 },
-      smtp: { subject: '', template: '', recipients: 0 },
-      social: { platforms: [], content: '' }
-    };
-    
     const newCampaign: Campaign = {
       id: `camp${Date.now()}`,
       title: formData.title,
@@ -89,8 +84,19 @@ export function useCampaigns() {
       owner: 'user1',
       team: ['team1'],
       channelDetails: {
-        ...defaultChannelDetails,
-        ...formData.channelDetails
+        sms: formData.channelDetails?.sms ? {
+          message: formData.channelDetails.sms.message,
+          recipients: formData.channelDetails.sms.recipients
+        } : undefined,
+        smtp: formData.channelDetails?.smtp ? {
+          subject: formData.channelDetails.smtp.subject,
+          template: formData.channelDetails.smtp.template,
+          recipients: formData.channelDetails.smtp.recipients
+        } : undefined,
+        social: formData.channelDetails?.social ? {
+          platforms: formData.channelDetails.social.platforms,
+          content: formData.channelDetails.social.content
+        } : undefined
       }
     };
     

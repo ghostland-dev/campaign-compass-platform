@@ -36,13 +36,6 @@ const CampaignEdit = () => {
   const handleSubmit = (formData: CampaignFormValues) => {
     if (!campaign) return;
     
-    // Prepare default channel details
-    const defaultChannelDetails = {
-      sms: { message: '', recipients: 0 },
-      smtp: { subject: '', template: '', recipients: 0 },
-      social: { platforms: [], content: '' }
-    };
-    
     const updatedCampaign: Campaign = {
       ...campaign,
       title: formData.title,
@@ -52,9 +45,20 @@ const CampaignEdit = () => {
       endDate: formData.endDate.toISOString().split('T')[0],
       channels: formData.channels as Channel[],
       channelDetails: {
-        ...defaultChannelDetails,
-        ...formData.channelDetails
-      },
+        sms: formData.channelDetails?.sms ? {
+          message: formData.channelDetails.sms.message,
+          recipients: formData.channelDetails.sms.recipients
+        } : undefined,
+        smtp: formData.channelDetails?.smtp ? {
+          subject: formData.channelDetails.smtp.subject,
+          template: formData.channelDetails.smtp.template,
+          recipients: formData.channelDetails.smtp.recipients
+        } : undefined,
+        social: formData.channelDetails?.social ? {
+          platforms: formData.channelDetails.social.platforms,
+          content: formData.channelDetails.social.content
+        } : undefined
+      }
     };
     
     updateCampaign(updatedCampaign);
@@ -104,10 +108,20 @@ const CampaignEdit = () => {
     startDate: new Date(campaign?.startDate || new Date()),
     endDate: new Date(campaign?.endDate || new Date()),
     channels: campaign?.channels as Channel[] || [],
-    channelDetails: campaign?.channelDetails || {
-      sms: { message: '', recipients: 0 },
-      smtp: { subject: '', template: '', recipients: 0 },
-      social: { platforms: [], content: '' }
+    channelDetails: {
+      sms: campaign?.channelDetails?.sms ? {
+        message: campaign.channelDetails.sms.message,
+        recipients: campaign.channelDetails.sms.recipients
+      } : undefined,
+      smtp: campaign?.channelDetails?.smtp ? {
+        subject: campaign.channelDetails.smtp.subject,
+        template: campaign.channelDetails.smtp.template,
+        recipients: campaign.channelDetails.smtp.recipients
+      } : undefined,
+      social: campaign?.channelDetails?.social ? {
+        platforms: campaign.channelDetails.social.platforms,
+        content: campaign.channelDetails.social.content
+      } : undefined
     }
   };
 

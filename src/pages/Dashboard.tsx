@@ -60,11 +60,21 @@ const Dashboard = () => {
       channels: formData.channels as Channel[],
       owner: 'user1',
       team: ['team1'],
-      channelDetails: formData.channelDetails || {
-        sms: { message: '', recipients: 0 },
-        smtp: { subject: '', template: '', recipients: 0 },
-        social: { platforms: [], content: '' }
-      },
+      channelDetails: {
+        sms: formData.channelDetails?.sms ? {
+          message: formData.channelDetails.sms.message,
+          recipients: formData.channelDetails.sms.recipients
+        } : undefined,
+        smtp: formData.channelDetails?.smtp ? {
+          subject: formData.channelDetails.smtp.subject,
+          template: formData.channelDetails.smtp.template,
+          recipients: formData.channelDetails.smtp.recipients
+        } : undefined,
+        social: formData.channelDetails?.social ? {
+          platforms: formData.channelDetails.social.platforms,
+          content: formData.channelDetails.social.content
+        } : undefined
+      }
     };
     
     // Ajouter la campagne et mettre à jour l'état
