@@ -77,3 +77,13 @@ export const addCalendarEvent = (event: CalendarEvent): CalendarEvent[] => {
   saveCalendarEvents(updatedEvents);
   return updatedEvents;
 };
+
+// Mettre à jour une campagne
+export const updateCampaign = (updatedCampaign: Campaign): void => {
+  const campaigns = getCampaigns();
+  const updatedCampaigns = campaigns.map(campaign => 
+    campaign.id === updatedCampaign.id ? updatedCampaign : campaign
+  );
+  
+  localStorage.setItem('campaigns', JSON.stringify(updatedCampaigns));
+};

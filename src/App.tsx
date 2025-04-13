@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Dashboard from "./pages/Dashboard";
 import CampaignDetails from "./pages/CampaignDetails";
+import CampaignEdit from "./pages/CampaignEdit";
 import Settings from "./pages/Settings";
 import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
@@ -21,6 +22,7 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Dashboard />} />
           <Route path="/campaign/:id" element={<CampaignDetails />} />
+          <Route path="/campaign/:id/edit" element={<CampaignEdit />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/settings/*" element={<Settings />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
