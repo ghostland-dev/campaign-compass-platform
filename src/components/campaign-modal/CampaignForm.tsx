@@ -15,12 +15,19 @@ import ChannelDetailsFields from './ChannelDetailsFields';
 interface CampaignFormProps {
   onSubmit: (values: CampaignFormValues) => void;
   onCancel: () => void;
+  initialValues?: CampaignFormValues;
+  submitButtonText?: string;
 }
 
-const CampaignForm: React.FC<CampaignFormProps> = ({ onSubmit, onCancel }) => {
+const CampaignForm: React.FC<CampaignFormProps> = ({ 
+  onSubmit, 
+  onCancel, 
+  initialValues,
+  submitButtonText = 'Créer la campagne'
+}) => {
   const form = useForm<CampaignFormValues>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
+    defaultValues: initialValues || {
       title: '',
       description: '',
       status: 'draft',
@@ -55,7 +62,7 @@ const CampaignForm: React.FC<CampaignFormProps> = ({ onSubmit, onCancel }) => {
           >
             Annuler
           </Button>
-          <Button type="submit">Créer la campagne</Button>
+          <Button type="submit">{submitButtonText}</Button>
         </DialogFooter>
       </form>
     </Form>
