@@ -1,7 +1,7 @@
 
 export type CampaignStatus = 'draft' | 'active' | 'completed' | 'paused';
 
-export type Channel = 'email' | 'social' | 'blog' | 'ads' | 'other';
+export type Channel = 'email' | 'social' | 'blog' | 'ads' | 'sms' | 'smtp' | 'other';
 
 export interface Campaign {
   id: string;
@@ -18,6 +18,21 @@ export interface Campaign {
     clicks: number;
     conversions: number;
     engagement: number;
+  };
+  channelDetails?: {
+    sms?: {
+      message: string;
+      recipients: number;
+    };
+    smtp?: {
+      subject: string;
+      template: string;
+      recipients: number;
+    };
+    social?: {
+      platforms: string[];
+      content: string;
+    };
   };
 }
 

@@ -49,6 +49,7 @@ export function useCampaigns() {
   };
   
   const handleCreateCampaign = (formData: any) => {
+    // Extract the necessary fields
     const newCampaign: Campaign = {
       id: `camp${Date.now()}`,
       title: formData.title,
@@ -59,6 +60,7 @@ export function useCampaigns() {
       channels: formData.channels,
       owner: 'user1',
       team: ['team1'],
+      channelDetails: formData.channelDetails
     };
     
     // Ajouter la campagne et mettre à jour l'état
@@ -77,9 +79,20 @@ export function useCampaigns() {
     
     addCalendarEvent(newEvent);
     
+    let channelDescription = '';
+    if (newCampaign.channels.includes('sms')) {
+      channelDescription = 'SMS';
+    } else if (newCampaign.channels.includes('smtp')) {
+      channelDescription = 'Email (SMTP)';
+    } else if (newCampaign.channels.includes('social')) {
+      channelDescription = 'Réseaux sociaux';
+    } else {
+      channelDescription = newCampaign.channels.join(', ');
+    }
+    
     toast({
       title: "Campagne créée",
-      description: `La campagne "${formData.title}" a été créée avec succès.`,
+      description: `La campagne "${formData.title}" a été créée avec succès (${channelDescription}).`,
     });
   };
   

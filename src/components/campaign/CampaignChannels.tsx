@@ -12,7 +12,9 @@ const CampaignChannels: React.FC<CampaignChannelsProps> = ({ channels }) => {
     return channel === 'email' ? 'Email' : 
            channel === 'social' ? 'Social' : 
            channel === 'blog' ? 'Blog' : 
-           channel === 'ads' ? 'Ads' : 'Autre';
+           channel === 'ads' ? 'Ads' : 
+           channel === 'sms' ? 'SMS' : 
+           channel === 'smtp' ? 'SMTP' : 'Autre';
   };
 
   return (

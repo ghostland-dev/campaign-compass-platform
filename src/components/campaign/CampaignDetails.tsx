@@ -2,6 +2,7 @@
 import React from 'react';
 import { Calendar } from 'lucide-react';
 import { Campaign } from '@/types';
+import CampaignChannelDetails from './CampaignChannelDetails';
 
 interface CampaignDetailsContentProps {
   campaign: Campaign;
@@ -17,7 +18,9 @@ const CampaignDetailsContent: React.FC<CampaignDetailsContentProps> = ({ campaig
         </p>
       </div>
       
-      <div className="bg-card rounded-lg p-6 shadow-sm border border-border">
+      <CampaignChannelDetails campaign={campaign} />
+      
+      <div className="bg-card rounded-lg p-6 shadow-sm border border-border mt-8">
         <h2 className="text-xl font-semibold mb-4">Calendrier de la campagne</h2>
         <div className="flex items-center text-muted-foreground text-sm mb-6">
           <Calendar className="h-4 w-4 mr-2" />
