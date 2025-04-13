@@ -51,8 +51,8 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
           {/* Header */}
           <div className="flex items-center justify-between p-4 border-b">
             <Link to="/" className="flex items-center gap-2">
-              <Calendar className="h-6 w-6 text-marketing-primary" />
-              <span className="text-xl font-bold text-marketing-primary">CampaignCompass</span>
+              <Calendar className="h-6 w-6 text-primary" />
+              <span className="text-xl font-bold text-primary">CampaignCompass</span>
             </Link>
             <Button variant="ghost" size="icon" className="md:hidden" onClick={toggleSidebar}>
               <X className="h-5 w-5" />

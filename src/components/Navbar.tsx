@@ -28,8 +28,8 @@ const Navbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
             <Menu className="h-5 w-5" />
           </Button>
           <Link to="/" className="flex items-center gap-1 md:hidden">
-            <Calendar className="h-6 w-6 text-marketing-primary" />
-            <span className="text-xl font-bold text-marketing-primary">CC</span>
+            <Calendar className="h-6 w-6 text-primary" />
+            <span className="text-xl font-bold text-primary">CC</span>
           </Link>
         </div>
         
