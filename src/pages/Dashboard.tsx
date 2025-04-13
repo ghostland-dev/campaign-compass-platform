@@ -21,6 +21,7 @@ import StatsOverview from '@/components/dashboard/StatsOverview';
 import CampaignList from '@/components/dashboard/CampaignList';
 import RecentActivity from '@/components/dashboard/RecentActivity';
 import { mockCalendarEvents } from '@/data/mockData';
+import { CampaignFormValues } from '@/components/campaign-modal/CampaignFormSchema';
 
 const Dashboard = () => {
   const { toast } = useToast();
@@ -48,7 +49,7 @@ const Dashboard = () => {
     }
   }, []);
   
-  const handleCreateCampaign = (formData: any) => {
+  const handleCreateCampaign = (formData: CampaignFormValues) => {
     const newCampaign: Campaign = {
       id: `camp${Date.now()}`,  // Utiliser un timestamp pour l'ID
       title: formData.title,
@@ -59,6 +60,7 @@ const Dashboard = () => {
       channels: formData.channels,
       owner: 'user1',
       team: ['team1'],
+      channelDetails: formData.channelDetails,
     };
     
     // Ajouter la campagne et mettre à jour l'état

@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Layout from '@/components/Layout';
@@ -6,8 +7,9 @@ import { Campaign } from '@/types';
 import { getCampaigns, updateCampaign } from '@/services/storageService';
 import CampaignForm from '@/components/campaign-modal/CampaignForm';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Save } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
+import { CampaignFormValues } from '@/components/campaign-modal/CampaignFormSchema';
 
 const CampaignEdit = () => {
   const { id } = useParams<{ id: string }>();
@@ -31,7 +33,7 @@ const CampaignEdit = () => {
     loadCampaign();
   }, [id]);
 
-  const handleSubmit = (formData: any) => {
+  const handleSubmit = (formData: CampaignFormValues) => {
     if (!campaign) return;
     
     const updatedCampaign: Campaign = {
@@ -42,8 +44,7 @@ const CampaignEdit = () => {
       startDate: formData.startDate.toISOString().split('T')[0],
       endDate: formData.endDate.toISOString().split('T')[0],
       channels: formData.channels,
-      owner: campaign.owner,
-      team: campaign.team,
+      channelDetails: formData.channelDetails,
     };
     
     updateCampaign(updatedCampaign);
@@ -86,13 +87,18 @@ const CampaignEdit = () => {
     );
   }
 
-  const formInitialValues = {
+  const formInitialValues: CampaignFormValues = {
     title: campaign.title,
     description: campaign.description,
     status: campaign.status,
     startDate: new Date(campaign.startDate),
     endDate: new Date(campaign.endDate),
     channels: campaign.channels,
+    channelDetails: campaign.channelDetails || {
+      sms: { message: '', recipients: 0 },
+      smtp: { subject: '', template: '', recipients: 0 },
+      social: { platforms: [], content: '' }
+    }
   };
 
   return (

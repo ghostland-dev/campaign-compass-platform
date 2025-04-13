@@ -10,6 +10,7 @@ import {
   updateCampaign
 } from '@/services/storageService';
 import { useToast } from '@/hooks/use-toast';
+import { CampaignFormValues } from '@/components/campaign-modal/CampaignFormSchema';
 
 export function useCampaigns() {
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
@@ -78,7 +79,7 @@ export function useCampaigns() {
     setFilteredCampaigns(filtered);
   };
   
-  const handleCreateCampaign = (formData: any) => {
+  const handleCreateCampaign = (formData: CampaignFormValues) => {
     // Extract the necessary fields
     const newCampaign: Campaign = {
       id: `camp${Date.now()}`,
