@@ -4,7 +4,7 @@ import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import { UseFormReturn } from 'react-hook-form';
 import { CalendarIcon } from 'lucide-react';
-import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
+import { FormField, FormItem, FormLabel, FormControl, FormMessage, FormDescription } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Calendar } from '@/components/ui/calendar';
@@ -16,26 +16,34 @@ interface DateFieldsProps {
 
 const DateFields: React.FC<DateFieldsProps> = ({ form }) => {
   return (
-    <div className="grid grid-cols-2 gap-4">
+    <div className="grid grid-cols-1 gap-5">
       <FormField
         control={form.control}
         name="startDate"
         render={({ field }) => (
           <FormItem className="flex flex-col">
-            <FormLabel>Date de début</FormLabel>
+            <FormLabel className="text-base font-medium">Date de début</FormLabel>
+            <FormDescription className="text-sm text-muted-foreground">
+              Quand votre campagne commencera-t-elle?
+            </FormDescription>
             <Popover>
               <PopoverTrigger asChild>
                 <FormControl>
                   <Button
                     variant="outline"
-                    className="pl-3 text-left font-normal"
+                    className="h-11 pl-3 text-left font-normal transition-shadow focus-visible:shadow-md w-full justify-start"
                   >
                     {field.value ? (
-                      format(field.value, 'P', { locale: fr })
+                      <span className="flex items-center gap-2">
+                        <CalendarIcon className="h-4 w-4 opacity-70" />
+                        {format(field.value, 'd MMMM yyyy', { locale: fr })}
+                      </span>
                     ) : (
-                      <span>Sélectionner une date</span>
+                      <span className="flex items-center gap-2">
+                        <CalendarIcon className="h-4 w-4 opacity-50" />
+                        <span>Sélectionner une date</span>
+                      </span>
                     )}
-                    <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                   </Button>
                 </FormControl>
               </PopoverTrigger>
@@ -46,7 +54,7 @@ const DateFields: React.FC<DateFieldsProps> = ({ form }) => {
                   onSelect={field.onChange}
                   disabled={(date) => date < new Date()}
                   initialFocus
-                  className="p-3 pointer-events-auto"
+                  className="p-3 pointer-events-auto border rounded-md shadow-md"
                 />
               </PopoverContent>
             </Popover>
@@ -60,20 +68,28 @@ const DateFields: React.FC<DateFieldsProps> = ({ form }) => {
         name="endDate"
         render={({ field }) => (
           <FormItem className="flex flex-col">
-            <FormLabel>Date de fin</FormLabel>
+            <FormLabel className="text-base font-medium">Date de fin</FormLabel>
+            <FormDescription className="text-sm text-muted-foreground">
+              Quand votre campagne se terminera-t-elle?
+            </FormDescription>
             <Popover>
               <PopoverTrigger asChild>
                 <FormControl>
                   <Button
                     variant="outline"
-                    className="pl-3 text-left font-normal"
+                    className="h-11 pl-3 text-left font-normal transition-shadow focus-visible:shadow-md w-full justify-start"
                   >
                     {field.value ? (
-                      format(field.value, 'P', { locale: fr })
+                      <span className="flex items-center gap-2">
+                        <CalendarIcon className="h-4 w-4 opacity-70" />
+                        {format(field.value, 'd MMMM yyyy', { locale: fr })}
+                      </span>
                     ) : (
-                      <span>Sélectionner une date</span>
+                      <span className="flex items-center gap-2">
+                        <CalendarIcon className="h-4 w-4 opacity-50" />
+                        <span>Sélectionner une date</span>
+                      </span>
                     )}
-                    <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                   </Button>
                 </FormControl>
               </PopoverTrigger>
@@ -82,9 +98,9 @@ const DateFields: React.FC<DateFieldsProps> = ({ form }) => {
                   mode="single"
                   selected={field.value}
                   onSelect={field.onChange}
-                  disabled={(date) => date < new Date()}
+                  disabled={(date) => date < new Date() || (form.watch('startDate') && date < form.watch('startDate'))}
                   initialFocus
-                  className="p-3 pointer-events-auto"
+                  className="p-3 pointer-events-auto border rounded-md shadow-md"
                 />
               </PopoverContent>
             </Popover>

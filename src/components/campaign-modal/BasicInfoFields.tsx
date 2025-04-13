@@ -12,21 +12,21 @@ interface BasicInfoFieldsProps {
 
 const BasicInfoFields: React.FC<BasicInfoFieldsProps> = ({ form }) => {
   return (
-    <div className="space-y-4">
+    <div className="space-y-5">
       <FormField
         control={form.control}
         name="title"
         render={({ field }) => (
           <FormItem>
-            <FormLabel className="text-base">Titre</FormLabel>
-            <FormDescription>
+            <FormLabel className="text-base font-medium">Titre</FormLabel>
+            <FormDescription className="text-sm text-muted-foreground">
               Donnez un nom descriptif à votre campagne
             </FormDescription>
             <FormControl>
               <Input 
                 placeholder="Exemple: Promotion de Noël 2025" 
                 {...field} 
-                className="h-11"
+                className="h-11 transition-shadow focus-visible:shadow-md"
               />
             </FormControl>
             <FormMessage />
@@ -39,15 +39,15 @@ const BasicInfoFields: React.FC<BasicInfoFieldsProps> = ({ form }) => {
         name="description"
         render={({ field }) => (
           <FormItem>
-            <FormLabel className="text-base">Description</FormLabel>
-            <FormDescription>
+            <FormLabel className="text-base font-medium">Description</FormLabel>
+            <FormDescription className="text-sm text-muted-foreground">
               Décrivez l'objectif et le contenu de votre campagne
             </FormDescription>
             <FormControl>
               <Textarea 
                 placeholder="Décrivez brièvement cette campagne..." 
                 {...field} 
-                className="min-h-[100px] resize-y"
+                className="min-h-[120px] resize-y transition-shadow focus-visible:shadow-md"
               />
             </FormControl>
             <FormMessage />
