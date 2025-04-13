@@ -3,7 +3,7 @@ import React from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Search, Filter, Grid, List } from 'lucide-react';
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   DropdownMenu,
   DropdownMenuContent,
@@ -31,7 +31,7 @@ const CampaignFilters: React.FC<CampaignFiltersProps> = ({
   setIsGridView
 }) => {
   return (
-    <Tabs defaultValue="all" className="w-full" value={activeTab} onValueChange={onTabChange}>
+    <div className="w-full">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-4">
         <TabsList className="mb-2 md:mb-0">
           <TabsTrigger value="all">Toutes</TabsTrigger>
@@ -88,7 +88,7 @@ const CampaignFilters: React.FC<CampaignFiltersProps> = ({
           </div>
         </div>
       </div>
-    </Tabs>
+    </div>
   );
 };
 

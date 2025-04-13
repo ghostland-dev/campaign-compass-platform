@@ -2,7 +2,7 @@
 import React from 'react';
 import Layout from '@/components/Layout';
 import CampaignModal from '@/components/campaign-modal';
-import { TabsContent } from "@/components/ui/tabs";
+import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { useCampaigns } from '@/hooks/useCampaigns';
 import CampaignHeader from '@/components/campaigns/CampaignHeader';
 import CampaignFilters from '@/components/campaigns/CampaignFilters';
@@ -28,25 +28,27 @@ const Campaigns = () => {
       <div className="flex flex-col space-y-6">
         <CampaignHeader onCreateCampaign={() => setShowCampaignModal(true)} />
         
-        <CampaignFilters
-          searchTerm={searchTerm}
-          onSearchChange={setSearchTerm}
-          activeTab={activeTab}
-          onTabChange={setActiveTab}
-          isGridView={isGridView}
-          setIsGridView={setIsGridView}
-        />
-        
-        <TabsContent value={activeTab} className="mt-0">
-          <CampaignGrid
-            campaigns={campaigns}
-            isGridView={isGridView}
-            onDelete={handleDeleteCampaign}
+        <Tabs value={activeTab} onValueChange={setActiveTab}>
+          <CampaignFilters
             searchTerm={searchTerm}
+            onSearchChange={setSearchTerm}
             activeTab={activeTab}
-            onCreateCampaign={() => setShowCampaignModal(true)}
+            onTabChange={setActiveTab}
+            isGridView={isGridView}
+            setIsGridView={setIsGridView}
           />
-        </TabsContent>
+          
+          <TabsContent value={activeTab} className="mt-0">
+            <CampaignGrid
+              campaigns={campaigns}
+              isGridView={isGridView}
+              onDelete={handleDeleteCampaign}
+              searchTerm={searchTerm}
+              activeTab={activeTab}
+              onCreateCampaign={() => setShowCampaignModal(true)}
+            />
+          </TabsContent>
+        </Tabs>
       </div>
       
       <CampaignModal 
