@@ -11,6 +11,7 @@ import DateFields from './DateFields';
 import StatusField from './StatusField';
 import ChannelsField from './ChannelsField';
 import ChannelDetailsFields from './ChannelDetailsFields';
+import { Save, X } from 'lucide-react';
 
 interface CampaignFormProps {
   onSubmit: (values: CampaignFormValues) => void;
@@ -47,22 +48,48 @@ const CampaignForm: React.FC<CampaignFormProps> = ({
   
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
-        <BasicInfoFields form={form} />
-        <DateFields form={form} />
-        <StatusField form={form} />
-        <ChannelsField form={form} />
-        <ChannelDetailsFields form={form} />
+      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
+        <div className="bg-muted/30 rounded-lg p-5 border border-border/50">
+          <h3 className="font-medium mb-4 text-primary">Informations de base</h3>
+          <BasicInfoFields form={form} />
+        </div>
         
-        <DialogFooter className="pt-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="bg-muted/30 rounded-lg p-5 border border-border/50">
+            <h3 className="font-medium mb-4 text-primary">Planification</h3>
+            <DateFields form={form} />
+          </div>
+          
+          <div className="bg-muted/30 rounded-lg p-5 border border-border/50">
+            <h3 className="font-medium mb-4 text-primary">Statut</h3>
+            <StatusField form={form} />
+          </div>
+        </div>
+        
+        <div className="bg-muted/30 rounded-lg p-5 border border-border/50">
+          <h3 className="font-medium mb-4 text-primary">Canaux de diffusion</h3>
+          <ChannelsField form={form} />
+        </div>
+        
+        <div className="bg-muted/30 rounded-lg p-5 border border-border/50">
+          <h3 className="font-medium mb-4 text-primary">Paramètres des canaux</h3>
+          <ChannelDetailsFields form={form} />
+        </div>
+        
+        <DialogFooter className="gap-2 pt-4">
           <Button 
             type="button" 
             variant="outline" 
             onClick={onCancel}
+            className="gap-2"
           >
+            <X className="h-4 w-4" />
             Annuler
           </Button>
-          <Button type="submit">{submitButtonText}</Button>
+          <Button type="submit" className="gap-2">
+            <Save className="h-4 w-4" />
+            {submitButtonText}
+          </Button>
         </DialogFooter>
       </form>
     </Form>
