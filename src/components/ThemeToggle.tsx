@@ -4,38 +4,51 @@ import { Moon, Sun } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 export function ThemeToggle() {
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [theme, setTheme] = useState<'light' | 'dark' | 'system'>('system');
 
   useEffect(() => {
-    // Vérifier si le thème sombre est défini dans localStorage ou si l'utilisateur préfère le thème sombre
-    const isDark = localStorage.getItem('theme') === 'dark' || 
-      (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    // Check if theme is set in localStorage
+    const storedTheme = localStorage.getItem('theme') as 'light' | 'dark' | 'system' | null;
     
-    setIsDarkMode(isDark);
-    
-    // Appliquer le thème
-    if (isDark) {
-      document.documentElement.classList.add('dark');
+    if (storedTheme) {
+      setTheme(storedTheme);
     } else {
-      document.documentElement.classList.remove('dark');
+      // Default to system preference
+      setTheme('system');
     }
+    
+    // Apply the theme
+    applyTheme(storedTheme || 'system');
   }, []);
 
-  const toggleTheme = () => {
-    setIsDarkMode(!isDarkMode);
+  const applyTheme = (newTheme: 'light' | 'dark' | 'system') => {
+    const root = document.documentElement;
     
-    if (!isDarkMode) {
-      document.documentElement.classList.add('dark');
-      localStorage.setItem('theme', 'dark');
+    if (newTheme === 'dark' || 
+        (newTheme === 'system' && 
+         window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      root.classList.add('dark');
     } else {
-      document.documentElement.classList.remove('dark');
-      localStorage.setItem('theme', 'light');
+      root.classList.remove('dark');
     }
   };
 
+  const toggleTheme = () => {
+    const newTheme = theme === 'dark' ? 'light' : 'dark';
+    setTheme(newTheme);
+    localStorage.setItem('theme', newTheme);
+    applyTheme(newTheme);
+  };
+
   return (
-    <Button variant="ghost" size="icon" onClick={toggleTheme} title={isDarkMode ? 'Passer au mode clair' : 'Passer au mode sombre'}>
-      {isDarkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+    <Button 
+      variant="ghost" 
+      size="icon" 
+      onClick={toggleTheme} 
+      title={theme === 'dark' ? 'Passer au mode clair' : 'Passer au mode sombre'}
+      className="text-foreground hover:text-foreground/80"
+    >
+      {theme === 'dark' ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
     </Button>
   );
 }

@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -9,6 +9,34 @@ import { useToast } from '@/hooks/use-toast';
 
 const Preferences = () => {
   const { toast } = useToast();
+  const [theme, setTheme] = useState<'light' | 'dark' | 'system'>('system');
+  
+  useEffect(() => {
+    // Get the current theme from localStorage
+    const storedTheme = localStorage.getItem('theme') as 'light' | 'dark' | 'system' | null;
+    if (storedTheme) {
+      setTheme(storedTheme);
+    } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      setTheme('dark');
+    } else {
+      setTheme('light');
+    }
+  }, []);
+
+  const handleThemeChange = (value: 'light' | 'dark' | 'system') => {
+    setTheme(value);
+    localStorage.setItem('theme', value);
+    
+    const root = document.documentElement;
+    
+    if (value === 'dark' || 
+        (value === 'system' && 
+         window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      root.classList.add('dark');
+    } else {
+      root.classList.remove('dark');
+    }
+  };
   
   const handleSavePreferences = () => {
     toast({
@@ -29,7 +57,11 @@ const Preferences = () => {
           <div className="space-y-6">
             <div className="space-y-2">
               <Label>Thème</Label>
-              <RadioGroup defaultValue="light" className="flex gap-6">
+              <RadioGroup 
+                value={theme} 
+                onValueChange={(value) => handleThemeChange(value as 'light' | 'dark' | 'system')} 
+                className="flex gap-6"
+              >
                 <div className="flex items-center space-x-2">
                   <RadioGroupItem value="light" id="light" />
                   <Label htmlFor="light">Clair</Label>

@@ -33,7 +33,7 @@ const Settings = () => {
       
       <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
         <div className="md:col-span-1">
-          <div className="bg-white p-4 rounded-lg shadow-sm space-y-2">
+          <div className="bg-card text-card-foreground p-4 rounded-lg shadow-sm space-y-2">
             <Button
               variant={isActive('/settings/account') ? "default" : "ghost"}
               className="w-full justify-start"
@@ -68,7 +68,7 @@ const Settings = () => {
           </div>
         </div>
         
-        <div className="md:col-span-3 bg-white p-6 rounded-lg shadow-sm">
+        <div className="md:col-span-3 bg-card text-card-foreground p-6 rounded-lg shadow-sm">
           <Routes>
             <Route path="/" element={<Account />} />
             <Route path="/account" element={<Account />} />

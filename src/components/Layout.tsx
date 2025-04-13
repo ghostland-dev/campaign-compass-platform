@@ -17,7 +17,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   };
   
   return (
-    <div className="min-h-screen bg-gray-50 flex">
+    <div className="min-h-screen bg-background flex">
       <Sidebar isOpen={sidebarOpen} toggleSidebar={toggleSidebar} />
       
       <div className="flex-1 flex flex-col md:ml-64 transition-all duration-300 ease-in-out">
