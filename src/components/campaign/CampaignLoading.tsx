@@ -1,6 +1,6 @@
 
 import React from 'react';
-import Navbar from '@/components/Navbar';
+import Layout from '@/components/Layout';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -14,35 +14,29 @@ const CampaignLoading: React.FC<CampaignLoadingProps> = ({ notFound = false }) =
 
   if (notFound) {
     return (
-      <div className="min-h-screen bg-gray-50 flex flex-col">
-        <Navbar />
-        <main className="flex-1 container mx-auto px-4 py-8">
-          <div className="text-center py-12">
-            <h1 className="text-2xl font-bold mb-4">Campagne non trouvée</h1>
-            <p className="text-muted-foreground mb-6">La campagne que vous recherchez n'existe pas ou a été supprimée.</p>
-            <Button onClick={() => navigate('/')}>
-              <ArrowLeft className="mr-2 h-4 w-4" />
-              Retour au tableau de bord
-            </Button>
-          </div>
-        </main>
-      </div>
+      <Layout>
+        <div className="text-center py-12">
+          <h1 className="text-2xl font-bold mb-4">Campagne non trouvée</h1>
+          <p className="text-muted-foreground mb-6">La campagne que vous recherchez n'existe pas ou a été supprimée.</p>
+          <Button onClick={() => navigate('/')}>
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Retour au tableau de bord
+          </Button>
+        </div>
+      </Layout>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
-      <Navbar />
-      <main className="flex-1 container mx-auto px-4 py-8">
-        <div className="animate-pulse">
-          <div className="h-8 bg-gray-200 rounded w-1/4 mb-4"></div>
-          <div className="h-4 bg-gray-200 rounded w-1/2 mb-8"></div>
-          <div className="h-32 bg-gray-200 rounded mb-6"></div>
-          <div className="h-16 bg-gray-200 rounded mb-6"></div>
-          <div className="h-16 bg-gray-200 rounded mb-6"></div>
-        </div>
-      </main>
-    </div>
+    <Layout>
+      <div className="animate-pulse">
+        <div className="h-8 bg-gray-200 rounded w-1/4 mb-4"></div>
+        <div className="h-4 bg-gray-200 rounded w-1/2 mb-8"></div>
+        <div className="h-32 bg-gray-200 rounded mb-6"></div>
+        <div className="h-16 bg-gray-200 rounded mb-6"></div>
+        <div className="h-16 bg-gray-200 rounded mb-6"></div>
+      </div>
+    </Layout>
   );
 };
 
