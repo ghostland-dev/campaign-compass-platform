@@ -41,7 +41,7 @@ const CampaignMetrics: React.FC<CampaignMetricsProps> = ({ campaign }) => {
   
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-      <div className="bg-white rounded-lg p-6 shadow-sm">
+      <div className="bg-card rounded-lg p-6 shadow-sm border border-border">
         <div className="text-sm text-muted-foreground mb-1">Progression</div>
         <div className="flex items-center mb-2">
           <Progress value={progress} className="h-2 flex-1" />
@@ -52,13 +52,13 @@ const CampaignMetrics: React.FC<CampaignMetricsProps> = ({ campaign }) => {
         </div>
       </div>
       
-      <div className="bg-white rounded-lg p-6 shadow-sm">
+      <div className="bg-card rounded-lg p-6 shadow-sm border border-border">
         <div className="text-sm text-muted-foreground mb-1">Canaux</div>
         <div className="flex flex-wrap gap-2 mt-2">
           {campaign.channels.map(channel => (
             <span 
               key={channel}
-              className="px-2 py-1 bg-gray-100 rounded-full text-xs font-medium"
+              className="px-2 py-1 bg-muted text-muted-foreground rounded-full text-xs font-medium"
             >
               {channel === 'email' ? 'Email' : 
                channel === 'social' ? 'Réseaux Sociaux' : 
@@ -69,14 +69,14 @@ const CampaignMetrics: React.FC<CampaignMetricsProps> = ({ campaign }) => {
         </div>
       </div>
       
-      <div className="bg-white rounded-lg p-6 shadow-sm">
+      <div className="bg-card rounded-lg p-6 shadow-sm border border-border">
         <div className="text-sm text-muted-foreground mb-1">Équipe</div>
         <div className="flex items-center mt-2">
           <div className="flex -space-x-2">
             {campaign.team.map((member, index) => (
               <div 
                 key={index}
-                className="h-8 w-8 rounded-full bg-marketing-primary text-white flex items-center justify-center text-xs font-medium border-2 border-white"
+                className="h-8 w-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-xs font-medium border-2 border-background"
               >
                 {member.charAt(0).toUpperCase()}
               </div>
