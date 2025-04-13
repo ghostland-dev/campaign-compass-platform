@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { Channel } from '@/types';
+import { cn } from '@/lib/utils';
 
 interface CampaignChannelsProps {
   channels: Channel[];
@@ -19,13 +20,19 @@ const CampaignChannels: React.FC<CampaignChannelsProps> = ({ channels }) => {
       {channels.slice(0, 2).map((channel, index) => (
         <span 
           key={index}
-          className="px-2 py-0.5 bg-muted text-muted-foreground rounded-full text-xs"
+          className={cn(
+            "px-2 py-0.5 rounded-full text-xs",
+            "bg-muted text-muted-foreground dark:bg-muted/80"
+          )}
         >
           {getChannelLabel(channel)}
         </span>
       ))}
       {channels.length > 2 && (
-        <span className="px-2 py-0.5 bg-muted text-muted-foreground rounded-full text-xs">
+        <span className={cn(
+          "px-2 py-0.5 rounded-full text-xs",
+          "bg-muted text-muted-foreground dark:bg-muted/80"
+        )}>
           +{channels.length - 2}
         </span>
       )}
