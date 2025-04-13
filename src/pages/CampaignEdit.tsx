@@ -36,6 +36,13 @@ const CampaignEdit = () => {
   const handleSubmit = (formData: CampaignFormValues) => {
     if (!campaign) return;
     
+    // Prepare default channel details
+    const defaultChannelDetails = {
+      sms: { message: '', recipients: 0 },
+      smtp: { subject: '', template: '', recipients: 0 },
+      social: { platforms: [], content: '' }
+    };
+    
     const updatedCampaign: Campaign = {
       ...campaign,
       title: formData.title,
@@ -44,10 +51,9 @@ const CampaignEdit = () => {
       startDate: formData.startDate.toISOString().split('T')[0],
       endDate: formData.endDate.toISOString().split('T')[0],
       channels: formData.channels as Channel[],
-      channelDetails: formData.channelDetails || {
-        sms: { message: '', recipients: 0 },
-        smtp: { subject: '', template: '', recipients: 0 },
-        social: { platforms: [], content: '' }
+      channelDetails: {
+        ...defaultChannelDetails,
+        ...formData.channelDetails
       },
     };
     

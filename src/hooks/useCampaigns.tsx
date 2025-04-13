@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { Campaign, CalendarEvent, Channel } from '@/types';
 import { 
@@ -21,29 +20,24 @@ export function useCampaigns() {
   const [activeTab, setActiveTab] = useState<string>("all");
   const { toast } = useToast();
 
-  // Charger les campagnes depuis localStorage au chargement
   useEffect(() => {
     loadCampaigns();
     
-    // Récupérer la préférence d'affichage (grille/liste) depuis localStorage si disponible
     const viewPreference = localStorage.getItem('campaignViewPreference');
     if (viewPreference) {
       setIsGridView(viewPreference === 'grid');
     }
     
-    // Récupérer l'onglet actif depuis localStorage si disponible
     const savedTab = localStorage.getItem('campaignActiveTab');
     if (savedTab) {
       setActiveTab(savedTab);
     }
   }, []);
   
-  // Sauvegarder les préférences d'affichage dans localStorage lorsqu'elles changent
   useEffect(() => {
     localStorage.setItem('campaignViewPreference', isGridView ? 'grid' : 'list');
   }, [isGridView]);
   
-  // Sauvegarder l'onglet actif dans localStorage lorsqu'il change
   useEffect(() => {
     localStorage.setItem('campaignActiveTab', activeTab);
   }, [activeTab]);
@@ -60,12 +54,10 @@ export function useCampaigns() {
   const filterCampaigns = () => {
     let filtered = [...campaigns];
     
-    // Filter by status (tab)
     if (activeTab !== "all") {
       filtered = filtered.filter(campaign => campaign.status === activeTab);
     }
     
-    // Filter by search term
     if (searchTerm.trim()) {
       const term = searchTerm.toLowerCase();
       filtered = filtered.filter(campaign => 
@@ -80,7 +72,12 @@ export function useCampaigns() {
   };
   
   const handleCreateCampaign = (formData: CampaignFormValues) => {
-    // Extract the necessary fields
+    const defaultChannelDetails = {
+      sms: { message: '', recipients: 0 },
+      smtp: { subject: '', template: '', recipients: 0 },
+      social: { platforms: [], content: '' }
+    };
+    
     const newCampaign: Campaign = {
       id: `camp${Date.now()}`,
       title: formData.title,
@@ -91,18 +88,15 @@ export function useCampaigns() {
       channels: formData.channels as Channel[],
       owner: 'user1',
       team: ['team1'],
-      channelDetails: formData.channelDetails || {
-        sms: { message: '', recipients: 0 },
-        smtp: { subject: '', template: '', recipients: 0 },
-        social: { platforms: [], content: '' }
+      channelDetails: {
+        ...defaultChannelDetails,
+        ...formData.channelDetails
       }
     };
     
-    // Ajouter la campagne et mettre à jour l'état
     const updatedCampaigns = addCampaign(newCampaign);
     setCampaigns(updatedCampaigns);
     
-    // Ajouter automatiquement un événement au calendrier pour cette campagne
     const newEvent: CalendarEvent = {
       id: `event${Date.now()}`,
       campaignId: newCampaign.id,
@@ -132,11 +126,9 @@ export function useCampaigns() {
   };
   
   const handleDeleteCampaign = (campaignId: string) => {
-    // Supprimer la campagne
     const updatedCampaigns = deleteCampaign(campaignId);
     setCampaigns(updatedCampaigns);
     
-    // Supprimer les événements du calendrier liés à cette campagne
     deleteCalendarEventsForCampaign(campaignId);
     
     toast({
@@ -145,10 +137,9 @@ export function useCampaigns() {
     });
   };
 
-  // Fonction pour mettre à jour une campagne existante
   const handleUpdateCampaign = (updatedCampaign: Campaign) => {
     updateCampaign(updatedCampaign);
-    loadCampaigns(); // Recharger les campagnes pour refléter les changements
+    loadCampaigns();
     
     toast({
       title: "Campagne mise à jour",

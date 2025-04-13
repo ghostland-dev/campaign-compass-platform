@@ -13,17 +13,17 @@ export const formSchema = z.object({
   }, { message: 'Canal invalide' })),
   channelDetails: z.object({
     sms: z.object({
-      message: z.string(),
-      recipients: z.number(),
+      message: z.string().default(''),
+      recipients: z.number().default(0),
     }).optional(),
     smtp: z.object({
-      subject: z.string(),
-      template: z.string(),
-      recipients: z.number(),
+      subject: z.string().default(''),
+      template: z.string().default(''),
+      recipients: z.number().default(0),
     }).optional(),
     social: z.object({
-      platforms: z.array(z.string()),
-      content: z.string(),
+      platforms: z.array(z.string()).default([]),
+      content: z.string().default(''),
     }).optional(),
   }).optional(),
 });
