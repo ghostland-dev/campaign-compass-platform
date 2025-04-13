@@ -11,7 +11,15 @@ import Calendar from '@/components/Calendar';
 import CampaignModal from '@/components/CampaignModal';
 import { mockCalendarEvents, mockStats } from '@/data/mockData';
 import { Stat, Campaign, CalendarEvent } from '@/types';
-import { getCampaigns, saveCampaigns, addCampaign, getCalendarEvents, addCalendarEvent } from '@/services/storageService';
+import { 
+  getCampaigns, 
+  saveCampaigns, 
+  addCampaign, 
+  getCalendarEvents, 
+  addCalendarEvent,
+  deleteCampaign,
+  deleteCalendarEventsForCampaign 
+} from '@/services/storageService';
 
 const Index = () => {
   const { toast } = useToast();
@@ -73,6 +81,16 @@ const Index = () => {
       title: "Campagne créée",
       description: `La campagne "${formData.title}" a été créée avec succès.`,
     });
+  };
+  
+  const handleDeleteCampaign = (campaignId: string) => {
+    // Supprimer la campagne
+    const updatedCampaigns = deleteCampaign(campaignId);
+    setCampaigns(updatedCampaigns);
+    
+    // Supprimer les événements du calendrier liés à cette campagne
+    const updatedEvents = deleteCalendarEventsForCampaign(campaignId);
+    setCalendarEvents(updatedEvents);
   };
   
   // Filter campaigns by status
@@ -138,33 +156,91 @@ const Index = () => {
               
               <TabsContent value="all" className="mt-0">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {campaigns.map(campaign => (
-                    <CampaignCard key={campaign.id} campaign={campaign} />
-                  ))}
+                  {campaigns.length > 0 ? (
+                    campaigns.map(campaign => (
+                      <CampaignCard 
+                        key={campaign.id} 
+                        campaign={campaign} 
+                        onDelete={handleDeleteCampaign} 
+                      />
+                    ))
+                  ) : (
+                    <div className="col-span-2 text-center py-8 bg-gray-50 rounded-lg border border-dashed">
+                      <p className="text-muted-foreground">Aucune campagne disponible</p>
+                      <Button 
+                        className="mt-4" 
+                        onClick={() => setShowCampaignModal(true)}
+                      >
+                        <Plus className="mr-2 h-4 w-4" /> Créer une campagne
+                      </Button>
+                    </div>
+                  )}
                 </div>
               </TabsContent>
               
               <TabsContent value="active" className="mt-0">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {activeCampaigns.map(campaign => (
-                    <CampaignCard key={campaign.id} campaign={campaign} />
-                  ))}
+                  {activeCampaigns.length > 0 ? (
+                    activeCampaigns.map(campaign => (
+                      <CampaignCard 
+                        key={campaign.id} 
+                        campaign={campaign} 
+                        onDelete={handleDeleteCampaign}
+                      />
+                    ))
+                  ) : (
+                    <div className="col-span-2 text-center py-8 bg-gray-50 rounded-lg border border-dashed">
+                      <p className="text-muted-foreground">Aucune campagne active</p>
+                      <Button 
+                        className="mt-4" 
+                        onClick={() => setShowCampaignModal(true)}
+                      >
+                        <Plus className="mr-2 h-4 w-4" /> Créer une campagne
+                      </Button>
+                    </div>
+                  )}
                 </div>
               </TabsContent>
               
               <TabsContent value="draft" className="mt-0">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {draftCampaigns.map(campaign => (
-                    <CampaignCard key={campaign.id} campaign={campaign} />
-                  ))}
+                  {draftCampaigns.length > 0 ? (
+                    draftCampaigns.map(campaign => (
+                      <CampaignCard 
+                        key={campaign.id} 
+                        campaign={campaign} 
+                        onDelete={handleDeleteCampaign}
+                      />
+                    ))
+                  ) : (
+                    <div className="col-span-2 text-center py-8 bg-gray-50 rounded-lg border border-dashed">
+                      <p className="text-muted-foreground">Aucun brouillon disponible</p>
+                      <Button 
+                        className="mt-4" 
+                        onClick={() => setShowCampaignModal(true)}
+                      >
+                        <Plus className="mr-2 h-4 w-4" /> Créer un brouillon
+                      </Button>
+                    </div>
+                  )}
                 </div>
               </TabsContent>
               
               <TabsContent value="completed" className="mt-0">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {completedCampaigns.map(campaign => (
-                    <CampaignCard key={campaign.id} campaign={campaign} />
-                  ))}
+                  {completedCampaigns.length > 0 ? (
+                    completedCampaigns.map(campaign => (
+                      <CampaignCard 
+                        key={campaign.id} 
+                        campaign={campaign} 
+                        onDelete={handleDeleteCampaign}
+                      />
+                    ))
+                  ) : (
+                    <div className="col-span-2 text-center py-8 bg-gray-50 rounded-lg border border-dashed">
+                      <p className="text-muted-foreground">Aucune campagne terminée</p>
+                    </div>
+                  )}
                 </div>
               </TabsContent>
             </Tabs>
@@ -210,7 +286,7 @@ const Index = () => {
           
           <div>
             <h2 className="text-xl font-semibold mb-4">Calendrier</h2>
-            <Calendar events={mockCalendarEvents} />
+            <Calendar events={calendarEvents} />
           </div>
         </div>
       </main>

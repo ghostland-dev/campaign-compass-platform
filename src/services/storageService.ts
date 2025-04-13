@@ -1,4 +1,3 @@
-
 import { Campaign, CalendarEvent } from "@/types";
 
 // Clés de stockage
@@ -33,6 +32,22 @@ export const addCampaign = (campaign: Campaign): Campaign[] => {
   const updatedCampaigns = [campaign, ...campaigns];
   saveCampaigns(updatedCampaigns);
   return updatedCampaigns;
+};
+
+// Supprimer une campagne
+export const deleteCampaign = (campaignId: string): Campaign[] => {
+  const campaigns = getCampaigns();
+  const updatedCampaigns = campaigns.filter(campaign => campaign.id !== campaignId);
+  saveCampaigns(updatedCampaigns);
+  return updatedCampaigns;
+};
+
+// Supprimer les événements du calendrier liés à une campagne
+export const deleteCalendarEventsForCampaign = (campaignId: string): CalendarEvent[] => {
+  const events = getCalendarEvents();
+  const updatedEvents = events.filter(event => event.campaignId !== campaignId);
+  saveCalendarEvents(updatedEvents);
+  return updatedEvents;
 };
 
 // Récupérer les événements du calendrier

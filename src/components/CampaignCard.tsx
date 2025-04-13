@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Calendar, Clock, Edit, MoreHorizontal, Trash2, Users } from 'lucide-react';
 import { format } from 'date-fns';
@@ -12,12 +11,16 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Badge } from '@/components/ui/badge';
+import { useToast } from '@/hooks/use-toast';
 
 interface CampaignCardProps {
   campaign: Campaign;
+  onDelete?: (campaignId: string) => void;
 }
 
-const CampaignCard: React.FC<CampaignCardProps> = ({ campaign }) => {
+const CampaignCard: React.FC<CampaignCardProps> = ({ campaign, onDelete }) => {
+  const { toast } = useToast();
+  
   // Function to get status text in French
   const getStatusText = (status: string) => {
     const statuses: Record<string, string> = {
@@ -56,8 +59,18 @@ const CampaignCard: React.FC<CampaignCardProps> = ({ campaign }) => {
   const startDate = new Date(campaign.startDate);
   const endDate = new Date(campaign.endDate);
 
+  const handleDelete = () => {
+    if (onDelete) {
+      onDelete(campaign.id);
+      toast({
+        title: "Campagne supprimée",
+        description: `La campagne "${campaign.title}" a été supprimée avec succès.`,
+      });
+    }
+  };
+
   return (
-    <div className="campaign-card animate-fade-in">
+    <div className="campaign-card animate-fade-in border rounded-lg bg-white shadow p-4">
       <div className="flex items-start justify-between">
         <div>
           <Badge className={getStatusColor(campaign.status)}>
@@ -76,7 +89,10 @@ const CampaignCard: React.FC<CampaignCardProps> = ({ campaign }) => {
               <Edit className="h-4 w-4" />
               Modifier
             </DropdownMenuItem>
-            <DropdownMenuItem className="flex gap-2 items-center text-destructive focus:text-destructive">
+            <DropdownMenuItem 
+              className="flex gap-2 items-center text-destructive focus:text-destructive"
+              onClick={handleDelete}
+            >
               <Trash2 className="h-4 w-4" />
               Supprimer
             </DropdownMenuItem>
