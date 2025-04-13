@@ -10,7 +10,7 @@ import {
   CardHeader, 
   CardTitle 
 } from '@/components/ui/card';
-import { Plus, Mail, Phone, Edit, Trash2 } from 'lucide-react';
+import { Plus, Mail, Phone, Edit, Trash2, AlertTriangle } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
@@ -23,6 +23,16 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import {
@@ -73,10 +83,24 @@ const teamMembers = [
   }
 ];
 
+const getRoleBadgeColor = (role: string) => {
+  const roleColors: Record<string, string> = {
+    'Directrice Marketing': 'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300 hover:bg-purple-200',
+    'Directeur Marketing': 'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300 hover:bg-purple-200',
+    'Responsable Réseaux Sociaux': 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300 hover:bg-blue-200',
+    'Graphiste': 'bg-pink-100 text-pink-800 dark:bg-pink-900/30 dark:text-pink-300 hover:bg-pink-200',
+    'Rédacteur Web': 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300 hover:bg-green-200',
+    'Chef de Projet': 'bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-300 hover:bg-orange-200',
+  };
+  
+  return roleColors[role] || 'bg-gray-100 text-gray-800 dark:bg-gray-800/50 dark:text-gray-300 hover:bg-gray-200';
+};
+
 const Team = () => {
   const { toast } = useToast();
   const [members, setMembers] = useState(teamMembers);
   const [isAddMemberOpen, setIsAddMemberOpen] = useState(false);
+  const [memberToDelete, setMemberToDelete] = useState<string | null>(null);
   const [newMember, setNewMember] = useState({
     name: '',
     role: '',
@@ -111,13 +135,21 @@ const Team = () => {
     });
   };
   
-  const handleDeleteMember = (id: string) => {
-    const updatedMembers = members.filter(member => member.id !== id);
+  const confirmDeleteMember = (id: string) => {
+    setMemberToDelete(id);
+  };
+  
+  const handleDeleteMember = () => {
+    if (!memberToDelete) return;
+    
+    const memberName = members.find(m => m.id === memberToDelete)?.name || 'Le membre';
+    const updatedMembers = members.filter(member => member.id !== memberToDelete);
     setMembers(updatedMembers);
+    setMemberToDelete(null);
     
     toast({
       title: "Membre supprimé",
-      description: "Le membre a été supprimé de l'équipe."
+      description: `${memberName} a été supprimé de l'équipe.`
     });
   };
   
@@ -133,7 +165,7 @@ const Team = () => {
           </div>
           <Dialog open={isAddMemberOpen} onOpenChange={setIsAddMemberOpen}>
             <DialogTrigger asChild>
-              <Button>
+              <Button className="transition-all duration-300 hover:scale-105">
                 <Plus className="mr-2 h-4 w-4" /> Ajouter un membre
               </Button>
             </DialogTrigger>
@@ -146,7 +178,7 @@ const Team = () => {
               </DialogHeader>
               <div className="space-y-4 py-4">
                 <div className="space-y-2">
-                  <Label htmlFor="name">Nom complet *</Label>
+                  <Label htmlFor="name">Nom complet <span className="text-destructive">*</span></Label>
                   <Input 
                     id="name" 
                     placeholder="Prénom Nom" 
@@ -155,7 +187,7 @@ const Team = () => {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="role">Rôle *</Label>
+                  <Label htmlFor="role">Rôle <span className="text-destructive">*</span></Label>
                   <Select 
                     onValueChange={(value) => setNewMember({...newMember, role: value})}
                   >
@@ -172,7 +204,7 @@ const Team = () => {
                   </Select>
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="email">Email *</Label>
+                  <Label htmlFor="email">Email <span className="text-destructive">*</span></Label>
                   <Input 
                     id="email" 
                     type="email" 
@@ -199,54 +231,114 @@ const Team = () => {
           </Dialog>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {members.map((member) => (
-            <Card key={member.id} className="overflow-hidden transition-all hover:shadow-md">
-              <CardHeader className="pb-2">
-                <div className="flex justify-between">
-                  <Avatar className="h-12 w-12">
-                    <AvatarImage src={member.avatar} alt={member.name} />
-                    <AvatarFallback>{member.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
-                  </Avatar>
-                  <div className="space-x-1">
-                    <Button variant="ghost" size="icon" title="Modifier">
-                      <Edit className="h-4 w-4" />
-                    </Button>
-                    <Button 
-                      variant="ghost" 
-                      size="icon" 
-                      title="Supprimer"
-                      onClick={() => handleDeleteMember(member.id)}
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
-                  </div>
-                </div>
-                <CardTitle className="mt-2">{member.name}</CardTitle>
-                <CardDescription>{member.role}</CardDescription>
-              </CardHeader>
-              <CardContent className="pb-2">
-                <div className="space-y-2 text-sm">
-                  <div className="flex items-center">
-                    <Mail className="h-4 w-4 mr-2 text-muted-foreground" />
-                    <span className="text-muted-foreground">{member.email}</span>
-                  </div>
-                  {member.phone && (
-                    <div className="flex items-center">
-                      <Phone className="h-4 w-4 mr-2 text-muted-foreground" />
-                      <span className="text-muted-foreground">{member.phone}</span>
+        {members.length === 0 ? (
+          <div className="rounded-lg border border-dashed p-10 text-center">
+            <div className="flex flex-col items-center justify-center space-y-3">
+              <div className="rounded-full bg-muted p-3">
+                <Plus className="h-6 w-6 text-muted-foreground" />
+              </div>
+              <div className="space-y-1">
+                <h3 className="text-lg font-medium">Aucun membre d'équipe</h3>
+                <p className="text-sm text-muted-foreground">
+                  Commencez à ajouter des membres à votre équipe.
+                </p>
+              </div>
+              <Button 
+                onClick={() => setIsAddMemberOpen(true)}
+                className="mt-3"
+              >
+                Ajouter un membre
+              </Button>
+            </div>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {members.map((member) => (
+              <Card 
+                key={member.id} 
+                className="overflow-hidden transition-all duration-300 hover:shadow-md animate-fade-in"
+              >
+                <CardHeader className="pb-2">
+                  <div className="flex justify-between">
+                    <Avatar className="h-12 w-12">
+                      <AvatarImage src={member.avatar} alt={member.name} />
+                      <AvatarFallback>{member.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
+                    </Avatar>
+                    <div className="space-x-1">
+                      <Button 
+                        variant="ghost" 
+                        size="icon" 
+                        title="Modifier"
+                        className="hover:bg-secondary/80 transition-colors duration-200"
+                      >
+                        <Edit className="h-4 w-4" />
+                      </Button>
+                      <AlertDialog open={memberToDelete === member.id} onOpenChange={(open) => !open && setMemberToDelete(null)}>
+                        <AlertDialogTrigger asChild>
+                          <Button 
+                            variant="ghost" 
+                            size="icon" 
+                            title="Supprimer"
+                            className="hover:bg-destructive/20 transition-colors duration-200"
+                            onClick={() => confirmDeleteMember(member.id)}
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                          <AlertDialogHeader>
+                            <AlertDialogTitle>Êtes-vous sûr de vouloir supprimer ce membre ?</AlertDialogTitle>
+                            <AlertDialogDescription>
+                              Cette action est irréversible. {member.name} sera définitivement supprimé de l'équipe.
+                            </AlertDialogDescription>
+                          </AlertDialogHeader>
+                          <AlertDialogFooter>
+                            <AlertDialogCancel>Annuler</AlertDialogCancel>
+                            <AlertDialogAction 
+                              onClick={handleDeleteMember}
+                              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                            >
+                              Supprimer
+                            </AlertDialogAction>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
                     </div>
-                  )}
-                </div>
-              </CardContent>
-              <CardFooter>
-                <Badge variant="secondary" className="ml-auto">
-                  {member.campaigns} campagne{member.campaigns !== 1 ? 's' : ''}
-                </Badge>
-              </CardFooter>
-            </Card>
-          ))}
-        </div>
+                  </div>
+                  <CardTitle className="mt-2">{member.name}</CardTitle>
+                  <Badge className={`mt-1 font-normal ${getRoleBadgeColor(member.role)}`}>
+                    {member.role}
+                  </Badge>
+                </CardHeader>
+                <CardContent className="pb-2">
+                  <div className="space-y-2 text-sm">
+                    <div className="flex items-center group cursor-copy" onClick={() => {
+                      navigator.clipboard.writeText(member.email);
+                      toast({ description: "Email copié dans le presse-papier" });
+                    }}>
+                      <Mail className="h-4 w-4 mr-2 text-muted-foreground" />
+                      <span className="text-muted-foreground truncate group-hover:text-primary transition-colors">{member.email}</span>
+                    </div>
+                    {member.phone && (
+                      <div className="flex items-center group cursor-copy" onClick={() => {
+                        navigator.clipboard.writeText(member.phone);
+                        toast({ description: "Numéro copié dans le presse-papier" });
+                      }}>
+                        <Phone className="h-4 w-4 mr-2 text-muted-foreground" />
+                        <span className="text-muted-foreground group-hover:text-primary transition-colors">{member.phone}</span>
+                      </div>
+                    )}
+                  </div>
+                </CardContent>
+                <CardFooter>
+                  <Badge variant="secondary" className="ml-auto">
+                    {member.campaigns} campagne{member.campaigns !== 1 ? 's' : ''}
+                  </Badge>
+                </CardFooter>
+              </Card>
+            ))}
+          </div>
+        )}
       </div>
     </Layout>
   );
