@@ -1,73 +1,44 @@
-# Welcome to your Lovable project
+# Compagin Compass
+![alt text](image.png)
+# 📊 CampaignCompass
 
-## Project info
+CampaignCompass est une plateforme de gestion et de suivi de campagnes marketing, conçue pour aider les équipes à organiser, visualiser et analyser leurs campagnes de manière efficace.
 
-**URL**: https://lovable.dev/projects/321b59b5-6ae1-4e44-9bb3-d7a66e9d0f97
+## 🚀 Fonctionnalités
 
-## How can I edit this code?
+- 📋 **Tableau de bord intuitif** : Vue d’ensemble claire sur les campagnes actives, les taux d’engagement, les publications planifiées et les conversions.
+- 🗓️ **Calendrier intégré** : Suivi des événements et actions planifiées par date.
+- 📈 **Analyses détaillées** : Visualisation des performances et KPIs pour optimiser les campagnes.
+- 👥 **Gestion d’équipe** : Collaboration facilitée avec suivi des actions en temps réel.
+- ⚙️ **Paramétrage personnalisable** : Adaptez la plateforme à vos besoins marketing spécifiques.
 
-There are several ways of editing your application.
+## 🖼️ Aperçu de l’interface
 
-**Use Lovable**
+![Aperçu de CampaignCompass](./254fda4b-d986-4931-9362-057c130804f7.png)
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/321b59b5-6ae1-4e44-9bb3-d7a66e9d0f97) and start prompting.
+## 🧑‍💻 Développeur
 
-Changes made via Lovable will be committed automatically to this repo.
+Ce projet a été développé par :
 
-**Use your preferred IDE**
+**Ismail MOUAYAHDA**  
+📧 ismail.mouayahda@gmail.com  
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+## 🛠️ Stack Technique
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+- **Frontend** : React + Tailwind CSS + Lucide React
+- **Backend** : (à spécifier si applicable)
+- **Langue** : Français
+- **Design** : Responsive, dark mode par défaut
 
-Follow these steps:
+## 📦 Installation (à adapter selon le stack utilisé)
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+```bash
+# Clone du repo
+git clone https://github.com/ton-compte/campaign-compass.git
+cd campaign-compass
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+# Installation des dépendances
+npm install
 
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# Démarrage du projet
 npm run dev
-```
-
-**Edit a file directly in GitHub**
-
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/321b59b5-6ae1-4e44-9bb3-d7a66e9d0f97) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes it is!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
