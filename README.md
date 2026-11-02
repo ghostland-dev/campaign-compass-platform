@@ -1,6 +1,5 @@
-# Compagin Compass
+# CampaignCompass
 ![alt text](image.png)
-# 📊 CampaignCompass
 
 CampaignCompass est une plateforme de gestion et de suivi de campagnes marketing, conçue pour aider les équipes à organiser, visualiser et analyser leurs campagnes de manière efficace.
 
